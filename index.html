@@ -2181,83 +2181,95 @@
     }
     #btn-pdf svg { width: 15px; height: 15px; flex-shrink: 0; }
 
+    @page {
+      size: A4 landscape;
+      margin: 0;
+    }
+
     @media print {
       /* Ocultar controles */
       #btn-pdf, #btn-presentar, #pres-controls, #nav-rail,
       #scroll-progress, #pres-slide-bar { display: none !important; }
 
-      /* Página horizontal tipo presentación */
-      @page {
-        size: A4 landscape;
-        margin: 0;
-      }
-
+      /* Forzar impresión de colores de fondo */
       * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
         color-adjust: exact !important;
       }
 
-      html, body {
-        width: 297mm;
-        height: 210mm;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background: #173E7A !important;
+      /* Desbloquear scroll para que el navegador vea todo el DOM */
+      html {
+        height: auto !important;
+        overflow: visible !important;
+      }
+      body {
+        width: 297mm !important;
+        height: auto !important;
+        min-height: auto !important;
+        overflow: visible !important;
+        margin: 0 !important;
+        padding: 0 !important;
       }
 
-      /* Cada sección = 1 página */
+      /* Cada sección ocupa exactamente una página */
       .section {
         width: 297mm !important;
         height: 210mm !important;
         min-height: 210mm !important;
         max-height: 210mm !important;
-        page-break-before: always;
-        page-break-inside: avoid;
-        break-before: page;
-        break-inside: avoid;
         overflow: hidden !important;
-        display: flex !important;
-        flex-direction: column;
-        justify-content: center;
         position: relative !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        page-break-before: always !important;
+        page-break-after: always !important;
+        page-break-inside: avoid !important;
+        break-before: page !important;
+        break-after: page !important;
+        break-inside: avoid !important;
+        box-sizing: border-box !important;
       }
 
-      .section:first-of-type {
-        page-break-before: avoid;
-        break-before: avoid;
+      #portada {
+        page-break-before: avoid !important;
+        break-before: avoid !important;
       }
 
-      /* Shell - reducir padding para caber en la página */
+      /* Shell */
       .shell {
-        padding: 32px 48px !important;
+        padding: 28px 44px !important;
         max-width: 100% !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
       }
 
-      /* Revelar elementos ocultos por animaciones */
-      .reveal, .reveal-delay-1, .reveal-delay-2,
-      .reveal-delay-3, .reveal-delay-4 {
+      /* Revelar todos los elementos animados */
+      .reveal, [class*="reveal-delay"],
+      [class*="portada-load"], [class*="portada-text"] {
         opacity: 1 !important;
         transform: none !important;
+        transition: none !important;
+        animation: none !important;
       }
 
-      /* Tipografía - reducir tamaños para que quepan */
-      .section-header h2 { font-size: 1.6rem !important; }
-      .section-header { margin-bottom: 28px !important; }
+      /* Reducir tipografía para que quepan */
+      .section-header h2  { font-size: 1.5rem !important; }
+      .section-header     { margin-bottom: 24px !important; }
 
-      /* Grids - ajustar para landscape */
-      .grid-4 { grid-template-columns: repeat(4, 1fr) !important; }
-      .chart-grid { grid-template-columns: 1fr 1fr !important; }
-
-      /* Canvas decorativo - ocultar para evitar problemas de render */
+      /* Canvas sin render en PDF */
       canvas { display: none !important; }
 
-      /* Ajuste portada */
-      #portada { justify-content: center !important; }
+      /* Grids */
+      .grid-4   { grid-template-columns: repeat(4,1fr) !important; }
+      .chart-grid { grid-template-columns: 1fr 1fr !important; }
 
-      /* Ajuste cierre */
-      #cierre .shell { padding: 24px 48px !important; }
+      /* Secciones con layout propio (grid 2 col) */
+      #quienes, #tecnologia {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+      }
     }
 
     /* Barra de controles (visible solo en modo presentación) */
@@ -3770,21 +3782,37 @@
 
   <script>
     function exportarPDF() {
-      // Forzar que los elementos con animaciones sean visibles
-      document.querySelectorAll('.reveal, [class*="reveal-delay"]').forEach(el => {
-        el.style.opacity = '1';
-        el.style.transform = 'none';
+      // Seleccionar todos los elementos animados y hacerlos visibles
+      const animated = document.querySelectorAll(
+        '.reveal, [class*="reveal-delay"], [class*="portada-load"], [class*="portada-text"]'
+      );
+      const prevStyles = [];
+      animated.forEach(el => {
+        prevStyles.push({ el, opacity: el.style.opacity, transform: el.style.transform, transition: el.style.transition });
+        el.style.opacity    = '1';
+        el.style.transform  = 'none';
         el.style.transition = 'none';
       });
-      // Forzar animaciones de portada visibles
-      document.querySelectorAll('[class*="portada-load"]').forEach(el => {
-        el.style.opacity = '1';
-        el.style.transform = 'none';
-        el.style.transition = 'none';
-      });
+
+      // Desbloquear el scroll del body para que el navegador vea todas las secciones
+      const prevBodyOverflow = document.body.style.overflow;
+      const prevHtmlOverflow = document.documentElement.style.overflow;
+      document.body.style.overflow = 'visible';
+      document.documentElement.style.overflow = 'visible';
+
       setTimeout(() => {
         window.print();
-      }, 300);
+        // Restaurar después de imprimir
+        setTimeout(() => {
+          document.body.style.overflow = prevBodyOverflow;
+          document.documentElement.style.overflow = prevHtmlOverflow;
+          prevStyles.forEach(({ el, opacity, transform, transition }) => {
+            el.style.opacity    = opacity;
+            el.style.transform  = transform;
+            el.style.transition = transition;
+          });
+        }, 1000);
+      }, 400);
     }
   </script>
 
