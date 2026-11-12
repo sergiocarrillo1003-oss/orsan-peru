@@ -2187,89 +2187,150 @@
     }
 
     @media print {
-      /* Ocultar controles */
-      #btn-pdf, #btn-presentar, #pres-controls, #nav-rail,
-      #scroll-progress, #pres-slide-bar { display: none !important; }
 
-      /* Forzar impresión de colores de fondo */
-      * {
+      /* ── 1. CONTROLES OCULTOS ── */
+      #btn-pdf, #btn-presentar, #pres-controls,
+      #nav-rail, #scroll-progress, #pres-slide-bar {
+        display: none !important;
+      }
+
+      /* ── 2. FORZAR COLORES DE FONDO ── */
+      *, *::before, *::after {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
         color-adjust: exact !important;
       }
 
-      /* Desbloquear scroll para que el navegador vea todo el DOM */
-      html {
-        height: auto !important;
-        overflow: visible !important;
-      }
-      body {
+      /* ── 3. HTML/BODY: flujo libre para que el navegador vea todo ── */
+      html, body {
         width: 297mm !important;
         height: auto !important;
-        min-height: auto !important;
+        min-height: unset !important;
+        max-height: unset !important;
         overflow: visible !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+      }
+
+      /* ── 4. CADA SECCIÓN = 1 PÁGINA ──
+         Solo page-break-BEFORE para evitar páginas vacías */
+      .section {
+        display: block !important;
+        width: 297mm !important;
+        height: 210mm !important;
+        min-height: unset !important;
+        max-height: 210mm !important;
+        overflow: hidden !important;
+        position: relative !important;
+        box-sizing: border-box !important;
+        page-break-before: always !important;
+        page-break-after: auto !important;
+        page-break-inside: avoid !important;
+        break-before: page !important;
+        break-after: auto !important;
+        break-inside: avoid !important;
         margin: 0 !important;
         padding: 0 !important;
       }
 
-      /* Cada sección ocupa exactamente una página */
-      .section {
-        width: 297mm !important;
-        height: 210mm !important;
-        min-height: 210mm !important;
-        max-height: 210mm !important;
-        overflow: hidden !important;
-        position: relative !important;
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: center !important;
-        page-break-before: always !important;
-        page-break-after: always !important;
-        page-break-inside: avoid !important;
-        break-before: page !important;
-        break-after: page !important;
-        break-inside: avoid !important;
-        box-sizing: border-box !important;
-      }
-
+      /* Primera sección: sin salto antes */
       #portada {
         page-break-before: avoid !important;
         break-before: avoid !important;
       }
 
-      /* Shell */
-      .shell {
-        padding: 28px 44px !important;
-        max-width: 100% !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
+      /* ── 5. SECCIONES CON GRID PROPIO (sin .shell) ── */
+      #quienes {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        align-items: stretch !important;
+      }
+      #quienes .qs-left,
+      #quienes .qs-right {
+        height: 210mm !important;
+        padding: 32px 40px !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
       }
 
-      /* Revelar todos los elementos animados */
-      .reveal, [class*="reveal-delay"],
-      [class*="portada-load"], [class*="portada-text"] {
+      #tecnologia {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        align-items: stretch !important;
+      }
+      #tecnologia .tech-left,
+      #tecnologia .tech-right {
+        height: 210mm !important;
+        padding: 32px 40px !important;
+        overflow: hidden !important;
+      }
+
+      /* ── 6. SHELL: padding reducido, sin max-width ── */
+      .shell {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 24px 44px !important;
+        box-sizing: border-box !important;
+      }
+      .shell--sm {
+        padding: 20px 44px !important;
+      }
+
+      /* ── 7. REVELAR ANIMACIONES ── */
+      .reveal,
+      [class*="reveal-delay"],
+      [class*="portada-load"] {
         opacity: 1 !important;
         transform: none !important;
         transition: none !important;
         animation: none !important;
+        visibility: visible !important;
       }
 
-      /* Reducir tipografía para que quepan */
-      .section-header h2  { font-size: 1.5rem !important; }
-      .section-header     { margin-bottom: 24px !important; }
+      /* ── 8. TIPOGRAFÍA ESCALADA ── */
+      .section-header h2   { font-size: 1.45rem !important; line-height: 1.2 !important; }
+      .section-header p    { font-size: .82rem !important; }
+      .section-header      { margin-bottom: 20px !important; }
 
-      /* Canvas sin render en PDF */
+      h1 { font-size: 2rem !important; }
+      h2 { font-size: 1.45rem !important; }
+      h3 { font-size: 1rem !important; }
+
+      /* ── 9. GRIDS ── */
+      .grid-2 { grid-template-columns: 1fr 1fr !important; gap: 16px !important; }
+      .grid-3 { grid-template-columns: repeat(3,1fr) !important; gap: 14px !important; }
+      .grid-4 { grid-template-columns: repeat(4,1fr) !important; gap: 12px !important; }
+      .chart-grid { grid-template-columns: 1fr 1fr !important; gap: 14px !important; }
+      .contact-grid { grid-template-columns: repeat(4,1fr) !important; gap: 12px !important; }
+
+      /* ── 10. CARDS: reducir padding ── */
+      .service-card, .cert-card, .why-card,
+      .stat-box, .kpi-box, .contact-card,
+      .process-step, .rubro-item {
+        padding: 12px !important;
+      }
+
+      /* ── 11. CANVAS DECORATIVO OCULTO ── */
       canvas { display: none !important; }
 
-      /* Grids */
-      .grid-4   { grid-template-columns: repeat(4,1fr) !important; }
-      .chart-grid { grid-template-columns: 1fr 1fr !important; }
-
-      /* Secciones con layout propio (grid 2 col) */
-      #quienes, #tecnologia {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
+      /* ── 12. PORTADA: centrar contenido ── */
+      #portada {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
       }
+
+      /* ── 13. AJUSTES ESPECÍFICOS ── */
+      .qs-left::before { display: none !important; } /* "40" decorativo gigante */
+
+      /* Cierre */
+      #cierre .cierre-inner { padding: 0 !important; }
+      .contact-card { padding: 14px 10px !important; }
+      .contact-card__value { font-size: .8rem !important; }
     }
 
     /* Barra de controles (visible solo en modo presentación) */
