@@ -3842,6 +3842,15 @@
   </script>
 
   <script>
+    /* ── Helpers ── */
+    function _loadLib(src) {
+      return new Promise((ok, fail) => {
+        const s = document.createElement('script');
+        s.src = src; s.onload = ok; s.onerror = fail;
+        document.head.appendChild(s);
+      });
+    }
+
     async function exportarPDF() {
       const btn = document.getElementById('btn-pdf');
       const originalHTML = btn.innerHTML;
@@ -3855,100 +3864,91 @@
         btn.disabled = true;
       };
 
-      const restoreBtn = () => {
-        btn.innerHTML = originalHTML;
-        btn.disabled = false;
-      };
-
       try {
         setStatus('Cargando…');
 
-        // ── Cargar html2canvas ──
-        if (!window.html2canvas) {
-          await new Promise((ok, fail) => {
-            const s = document.createElement('script');
-            s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-            s.onload = ok; s.onerror = fail;
-            document.head.appendChild(s);
-          });
-        }
-        // ── Cargar jsPDF ──
-        if (!window.jspdf) {
-          await new Promise((ok, fail) => {
-            const s = document.createElement('script');
-            s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
-            s.onload = ok; s.onerror = fail;
-            document.head.appendChild(s);
-          });
-        }
+        if (!window.html2canvas) await _loadLib('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+        if (!window.jspdf)      await _loadLib('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+
+        /* ── Esperar a que carguen las fuentes ── */
+        await document.fonts.ready;
 
         const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
-        const PW = 297, PH = 210; // A4 landscape mm
+        const sections   = Array.from(document.querySelectorAll('.section'));
 
-        const sections = Array.from(document.querySelectorAll('.section'));
-
-        // ── Revelar todos los elementos animados ──
+        /* ── Revelar animaciones ── */
         const animated = document.querySelectorAll(
           '.reveal, [class*="reveal-delay"], [class*="portada-load"], [class*="portada-text"]'
         );
         const animSaved = [];
         animated.forEach(el => {
-          animSaved.push({
-            el,
-            opacity: el.style.opacity, transform: el.style.transform,
-            transition: el.style.transition, animation: el.style.animation
-          });
-          el.style.opacity    = '1';
-          el.style.transform  = 'none';
-          el.style.transition = 'none';
-          el.style.animation  = 'none';
+          animSaved.push({ el, cs: el.getAttribute('style') || '' });
+          el.style.cssText += ';opacity:1!important;transform:none!important;transition:none!important;animation:none!important;visibility:visible!important;';
         });
 
-        // ── Capturar cada sección ──
+        /* ── Scroll al inicio para medir la primera sección ── */
+        window.scrollTo({ top: 0, behavior: 'instant' });
+        await new Promise(r => setTimeout(r, 80));
+
+        /* Dimensiones de página = dimensiones reales de la primera sección
+           (así el PDF respeta el aspect ratio original sin distorsión) */
+        const ref = sections[0];
+        const PW  = ref.offsetWidth;   // px
+        const PH  = ref.offsetHeight;  // px
+
+        /* jsPDF en unidades px: 1 px PDF = 1 px canvas */
+        const pdf = new jsPDF({
+          orientation: PW >= PH ? 'l' : 'p',
+          unit: 'px',
+          format: [PW, PH],
+          compress: true,
+          hotfixes: ['px_scaling'],
+        });
+
+        /* ── Capturar cada sección ── */
         for (let i = 0; i < sections.length; i++) {
           const sec = sections[i];
           setStatus(`Página ${i + 1} de ${sections.length}…`);
 
-          // Desplazarse a la sección para que el navegador la renderice
+          /* Desplazar la sección al viewport para que el navegador la pinte */
           sec.scrollIntoView({ block: 'start', behavior: 'instant' });
-          await new Promise(r => setTimeout(r, 120));
+          await new Promise(r => setTimeout(r, 160));
 
           const canvas = await html2canvas(sec, {
-            scale: 2,
+            scale: 2,              // doble resolución = texto nítido
             useCORS: true,
             allowTaint: true,
             logging: false,
             backgroundColor: null,
-            width:  sec.offsetWidth,
-            height: sec.offsetHeight,
+            width:   PW,
+            height:  PH,
             scrollX: -window.scrollX,
             scrollY: -window.scrollY,
+            windowWidth:  PW,
+            windowHeight: PH,
+            ignoreElements: (el) => el.id === 'btn-pdf' || el.id === 'btn-presentar' ||
+                                    el.id === 'pres-controls' || el.id === 'nav-rail' ||
+                                    el.id === 'scroll-progress' || el.id === 'pres-slide-bar',
           });
 
-          const img = canvas.toDataURL('image/jpeg', 0.93);
-          if (i > 0) pdf.addPage();
-          pdf.addImage(img, 'JPEG', 0, 0, PW, PH);
+          /* Añadir imagen al PDF a tamaño exacto de página (sin distorsión) */
+          const img = canvas.toDataURL('image/jpeg', 0.94);
+          if (i > 0) pdf.addPage([PW, PH], PW >= PH ? 'l' : 'p');
+          pdf.addImage(img, 'JPEG', 0, 0, PW, PH, '', 'FAST');
         }
 
-        // ── Restaurar animaciones ──
-        animSaved.forEach(({ el, opacity, transform, transition, animation }) => {
-          el.style.opacity    = opacity;
-          el.style.transform  = transform;
-          el.style.transition = transition;
-          el.style.animation  = animation;
-        });
+        /* ── Restaurar animaciones ── */
+        animSaved.forEach(({ el, cs }) => el.setAttribute('style', cs));
 
-        // Volver al inicio
         window.scrollTo({ top: 0, behavior: 'instant' });
-
         pdf.save('ORSAN-Presentacion-2026.pdf');
 
       } catch (err) {
         console.error('Error PDF:', err);
         alert('No se pudo generar el PDF.\n' + err.message);
       } finally {
-        restoreBtn();
+        btn.innerHTML = originalHTML;
+        btn.disabled  = false;
       }
     }
   </script>
