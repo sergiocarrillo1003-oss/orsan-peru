@@ -2182,9 +2182,82 @@
     #btn-pdf svg { width: 15px; height: 15px; flex-shrink: 0; }
 
     @media print {
-      #btn-pdf, #btn-presentar, #pres-controls, #nav-rail, #scroll-progress, #pres-slide-bar { display: none !important; }
-      body { background: #fff !important; }
-      .section { page-break-inside: avoid; min-height: auto !important; }
+      /* Ocultar controles */
+      #btn-pdf, #btn-presentar, #pres-controls, #nav-rail,
+      #scroll-progress, #pres-slide-bar { display: none !important; }
+
+      /* Página horizontal tipo presentación */
+      @page {
+        size: A4 landscape;
+        margin: 0;
+      }
+
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+
+      html, body {
+        width: 297mm;
+        height: 210mm;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: #173E7A !important;
+      }
+
+      /* Cada sección = 1 página */
+      .section {
+        width: 297mm !important;
+        height: 210mm !important;
+        min-height: 210mm !important;
+        max-height: 210mm !important;
+        page-break-before: always;
+        page-break-inside: avoid;
+        break-before: page;
+        break-inside: avoid;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column;
+        justify-content: center;
+        position: relative !important;
+      }
+
+      .section:first-of-type {
+        page-break-before: avoid;
+        break-before: avoid;
+      }
+
+      /* Shell - reducir padding para caber en la página */
+      .shell {
+        padding: 32px 48px !important;
+        max-width: 100% !important;
+      }
+
+      /* Revelar elementos ocultos por animaciones */
+      .reveal, .reveal-delay-1, .reveal-delay-2,
+      .reveal-delay-3, .reveal-delay-4 {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+
+      /* Tipografía - reducir tamaños para que quepan */
+      .section-header h2 { font-size: 1.6rem !important; }
+      .section-header { margin-bottom: 28px !important; }
+
+      /* Grids - ajustar para landscape */
+      .grid-4 { grid-template-columns: repeat(4, 1fr) !important; }
+      .chart-grid { grid-template-columns: 1fr 1fr !important; }
+
+      /* Canvas decorativo - ocultar para evitar problemas de render */
+      canvas { display: none !important; }
+
+      /* Ajuste portada */
+      #portada { justify-content: center !important; }
+
+      /* Ajuste cierre */
+      #cierre .shell { padding: 24px 48px !important; }
     }
 
     /* Barra de controles (visible solo en modo presentación) */
@@ -2296,7 +2369,7 @@
   <div id="pres-slide-bar"></div>
 
   <!-- ── BOTÓN PDF ── -->
-  <button id="btn-pdf" title="Descargar presentación en PDF" onclick="window.print()">
+  <button id="btn-pdf" title="Descargar presentación en PDF" onclick="exportarPDF()">
     <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path d="M4 1h6l3 3v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" stroke="white" stroke-width="1.4"/>
       <path d="M9 1v3h3" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
@@ -3693,6 +3766,26 @@
       });
     })();
 
+  </script>
+
+  <script>
+    function exportarPDF() {
+      // Forzar que los elementos con animaciones sean visibles
+      document.querySelectorAll('.reveal, [class*="reveal-delay"]').forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+        el.style.transition = 'none';
+      });
+      // Forzar animaciones de portada visibles
+      document.querySelectorAll('[class*="portada-load"]').forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+        el.style.transition = 'none';
+      });
+      setTimeout(() => {
+        window.print();
+      }, 300);
+    }
   </script>
 
 </body>
