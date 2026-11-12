@@ -1,0 +1,3676 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ORSAN · Presentación Comercial 2026</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Manrope:wght@500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS
+    ============================================================ */
+    :root {
+      --c-base:        #F4F7FB;
+      --c-navy:        #E8EEF7;
+      --c-blue-900:    #173E7A;
+      --c-blue-700:    #2157A4;
+      --c-blue-500:    #2D6BBF;
+      --c-orange:      #2157A4;
+      --c-orange-l:    #4B8FD4;
+      --c-green:       #10B981;
+      --c-muted:       #5B7085;
+      --c-line-d:      #D2E0EE;
+      --c-white:       #FFFFFF;
+      --c-off-white:   #EEF4FA;
+      --c-light-panel: #EEF4FA;
+      --c-text-dark:   #173E7A;
+      --c-text-mid:    #2C3E55;
+
+      --r-sm:   10px;
+      --r-md:   18px;
+      --r-lg:   26px;
+      --r-xl:   36px;
+      --r-2xl:  48px;
+      --r-pill: 9999px;
+
+      --sh-md: 0 4px 24px rgba(4,12,26,.18);
+      --sh-lg: 0 12px 48px rgba(4,12,26,.28);
+      --sh-xl: 0 24px 80px rgba(4,12,26,.40);
+
+      --font-body:    'Inter', sans-serif;
+      --font-heading: 'Manrope', sans-serif;
+      --font-number:  'Space Grotesk', sans-serif;
+    }
+
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: #F4F7FB;
+      color: var(--c-text-dark);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    img { display: block; max-width: 100%; }
+    a   { color: inherit; text-decoration: none; }
+    ul  { list-style: none; }
+
+    /* ============================================================
+       SCROLL PROGRESS BAR
+    ============================================================ */
+    #scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--c-blue-500), var(--c-blue-700));
+      z-index: 9999;
+      transition: width .1s linear;
+    }
+
+    /* ============================================================
+       NAV RAIL (vertical dot nav)
+    ============================================================ */
+    #nav-rail {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 900;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .nav-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.22);
+      cursor: pointer;
+      transition: all .25s ease;
+      border: 1px solid rgba(255,255,255,.25);
+      will-change: transform, opacity;
+      position: relative;
+    }
+
+    .nav-dot::after {
+      content: attr(title);
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(4,12,26,.88);
+      color: rgba(255,255,255,.9);
+      font-size: .68rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease;
+      letter-spacing: .02em;
+    }
+
+    .nav-dot:hover::after { opacity: 1; }
+
+    .nav-dot:hover,
+    .nav-dot.active {
+      background: var(--c-orange);
+      border-color: var(--c-orange);
+      transform: scale(1.5);
+    }
+
+    .nav-dot.active {
+      width: 9px;
+      height: 9px;
+      transform: scale(1);
+    }
+
+    /* ============================================================
+       ATOMS
+    ============================================================ */
+
+    /* Eyebrow pill */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-body);
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--c-orange-l);
+      background: rgba(33,87,164,.12);
+      border: 1px solid rgba(33,87,164,.25);
+      border-radius: var(--r-pill);
+      padding: 5px 14px 5px 10px;
+      width: fit-content;
+      margin-bottom: 16px;
+    }
+
+    .eyebrow::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--c-orange);
+      box-shadow: 0 0 8px var(--c-orange), 0 0 16px var(--c-orange-l);
+      flex-shrink: 0;
+    }
+
+    .eyebrow--dark {
+      color: var(--c-blue-700);
+      background: rgba(18,85,163,.08);
+      border-color: rgba(18,85,163,.2);
+    }
+
+    .eyebrow--dark::before {
+      background: var(--c-blue-700);
+      box-shadow: 0 0 8px var(--c-blue-500);
+    }
+
+    /* Badge */
+    .badge {
+      display: inline-block;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      padding: 4px 10px;
+      border-radius: var(--r-pill);
+      background: var(--c-orange);
+      color: #fff;
+    }
+
+    .badge--blue {
+      background: var(--c-blue-700);
+    }
+
+    .badge--green {
+      background: var(--c-green);
+    }
+
+    /* Chip */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: .78rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: var(--r-pill);
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      color: rgba(255,255,255,.9);
+      white-space: nowrap;
+    }
+
+    .chip::before {
+      content: '✓';
+      color: var(--c-green);
+      font-size: .7rem;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 20px 0;
+    }
+
+    /* Dot */
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       MOLECULES
+    ============================================================ */
+
+    /* KPI Card (glassmorphism number) */
+    .kpi {
+      background: rgba(255,255,255,.06);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--r-lg);
+      padding: 22px 24px;
+      will-change: transform, opacity;
+    }
+
+    .kpi__number {
+      font-family: var(--font-number);
+      font-size: 2.4rem;
+      font-weight: 700;
+      line-height: 1;
+      color: #fff;
+    }
+
+    .kpi__number span {
+      font-size: 1rem;
+      opacity: .7;
+      font-weight: 400;
+    }
+
+    .kpi__label {
+      font-size: .8rem;
+      color: rgba(255,255,255,.65);
+      margin-top: 6px;
+      font-weight: 500;
+    }
+
+    .kpi--orange .kpi__number { color: var(--c-orange-l); }
+    .kpi--blue   .kpi__number { color: #7DB8F5; }
+    .kpi--green  .kpi__number { color: #5DDBB0; }
+
+    /* Stat Box (white metric card) */
+    .stat-box {
+      background: var(--c-white);
+      border-radius: var(--r-md);
+      padding: 20px 24px;
+      box-shadow: var(--sh-md);
+      transition: transform .25s ease, box-shadow .25s ease;
+      will-change: transform;
+    }
+
+    .stat-box:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--sh-lg);
+    }
+
+    .stat-box__number {
+      font-family: var(--font-number);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--c-blue-900);
+      line-height: 1;
+    }
+
+    .stat-box__label {
+      font-size: .82rem;
+      color: var(--c-muted);
+      margin-top: 5px;
+    }
+
+    /* Service Card */
+    .service-card {
+      background: var(--c-white);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      box-shadow: var(--sh-md);
+      display: flex;
+      flex-direction: column;
+      transition: transform .3s ease, box-shadow .3s ease;
+      will-change: transform;
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--sh-lg);
+    }
+
+    .service-card__header {
+      padding: 28px 28px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card__header--blue {
+      background: linear-gradient(135deg, var(--c-blue-900), var(--c-blue-500));
+    }
+
+    .service-card__header--orange {
+      background: linear-gradient(135deg, #0D3070, var(--c-orange));
+    }
+
+    .service-card__header--navy {
+      background: linear-gradient(135deg, #0B2550 0%, var(--c-blue-900) 100%);
+    }
+
+    .service-card__header--blue .service-card__title,
+    .service-card__header--orange .service-card__title,
+    .service-card__header--navy .service-card__title { color: #fff; }
+
+    .service-card__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--r-sm);
+      background: rgba(255,255,255,.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .service-card__title {
+      font-family: var(--font-heading);
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--c-text-dark);
+    }
+
+    .service-card__sub {
+      font-size: .78rem;
+      color: rgba(255,255,255,.7);
+      margin-top: 2px;
+    }
+
+    .service-card__body {
+      padding: 24px 28px 28px;
+      flex: 1;
+    }
+
+    .service-card__body ul {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .service-card__body li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: .88rem;
+      color: var(--c-text-mid);
+      line-height: 1.5;
+    }
+
+    .service-card__body li::before {
+      content: '→';
+      color: var(--c-orange);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* Process Step Card */
+    .process-step {
+      background: rgba(255,255,255,.05);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--r-md);
+      padding: 24px 20px 20px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .3s ease;
+      will-change: transform;
+    }
+
+    .process-step:hover {
+      transform: translateY(-4px);
+    }
+
+    .process-step::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--c-orange), var(--c-orange-l));
+    }
+
+    .process-step--blue::after {
+      background: linear-gradient(90deg, var(--c-blue-700), var(--c-blue-500));
+    }
+
+    .process-step__num {
+      font-family: var(--font-number);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: rgba(255,255,255,.12);
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .process-step__title {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 700;
+      color: rgba(255,255,255,.9);
+      line-height: 1.3;
+    }
+
+    .process-step__text {
+      font-size: .82rem;
+      color: rgba(255,255,255,.6);
+      margin-top: 6px;
+    }
+
+    /* Tech Item */
+    .tech-item {
+      background: var(--c-white);
+      border-radius: var(--r-md);
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 2px 16px rgba(4,12,26,.07);
+      transition: transform .2s ease;
+      will-change: transform;
+    }
+
+    .tech-item:hover {
+      transform: translateY(-3px);
+    }
+
+    .tech-item__icon {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+      width: 42px;
+      text-align: center;
+    }
+
+    .tech-item__label {
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--c-text-dark);
+    }
+
+    /* Cert Card */
+    .cert-card {
+      background: rgba(255,255,255,.06);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--r-md);
+      padding: 20px 22px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      transition: background .25s ease, border-color .25s ease, transform .25s ease;
+      will-change: transform;
+    }
+
+    .cert-card:hover {
+      background: rgba(255,255,255,.11);
+      border-color: rgba(255,255,255,.18);
+      transform: translateY(-2px);
+    }
+
+    .cert-card__icon {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+
+    .cert-card__title {
+      font-size: .95rem;
+      font-weight: 700;
+      color: rgba(255,255,255,.9);
+    }
+
+    .cert-card__text {
+      font-size: .8rem;
+      color: rgba(255,255,255,.6);
+      margin-top: 4px;
+    }
+
+    /* Rubro Item */
+    .rubro-item {
+      background: var(--c-white);
+      border-radius: var(--r-md);
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 2px 16px rgba(4,12,26,.07);
+      transition: transform .2s ease;
+      will-change: transform;
+    }
+
+    .rubro-item:hover {
+      transform: translateY(-3px);
+    }
+
+    .rubro-item__icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      width: 36px;
+      text-align: center;
+    }
+
+    .rubro-item__label {
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--c-text-dark);
+    }
+
+    /* Why Card */
+    .why-card {
+      border-radius: var(--r-lg);
+      padding: 28px 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform .3s ease, box-shadow .3s ease;
+      will-change: transform;
+    }
+
+    .why-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .why-card__emoji {
+      font-size: 1.8rem;
+      line-height: 1;
+    }
+
+    .why-card__title {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    .why-card__text {
+      font-size: .84rem;
+      line-height: 1.55;
+    }
+
+    .why-card--light {
+      background: var(--c-white);
+      border: 1px solid var(--c-line-d);
+      box-shadow: 0 4px 20px rgba(4,12,26,.06);
+    }
+
+    .why-card--light .why-card__title,
+    .why-card--light .why-card__text {
+      color: var(--c-text-dark);
+    }
+
+    .why-card--light .why-card__text {
+      color: var(--c-muted);
+    }
+
+    .why-card--dark {
+      background: var(--c-blue-900);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .why-card--dark .why-card__title { color: #fff; }
+    .why-card--dark .why-card__text  { color: rgba(255,255,255,.65); }
+
+    .why-card--orange {
+      background: linear-gradient(135deg, #0D3070 0%, var(--c-orange) 100%);
+    }
+
+    .why-card--orange .why-card__title { color: #fff; }
+    .why-card--orange .why-card__text  { color: rgba(255,255,255,.75); }
+
+    /* Progress Row */
+    .progress-row {
+      margin-bottom: 14px;
+    }
+
+    .progress-row__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .progress-row__label {
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--c-text-mid);
+    }
+
+    .progress-row__value {
+      font-family: var(--font-number);
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--c-blue-900);
+    }
+
+    .progress-row__track {
+      height: 8px;
+      border-radius: var(--r-pill);
+      background: var(--c-line-d);
+      overflow: hidden;
+    }
+
+    .progress-row__fill {
+      height: 100%;
+      border-radius: var(--r-pill);
+      background: linear-gradient(90deg, var(--c-blue-700), var(--c-blue-500));
+      width: 0%;
+      transition: width 1.2s cubic-bezier(.4,0,.2,1);
+      will-change: width;
+    }
+
+    .progress-row__fill--orange {
+      background: linear-gradient(90deg, var(--c-orange), var(--c-orange-l));
+    }
+
+    /* ============================================================
+       ORGANISMS
+    ============================================================ */
+
+    /* Panels */
+    .panel-dark {
+      background: var(--c-navy);
+    }
+
+    .panel-glass {
+      background: rgba(255,255,255,.04);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .panel-light {
+      background: var(--c-white);
+    }
+
+    .panel-off-white {
+      background: var(--c-off-white);
+    }
+
+    /* Section wrapper */
+    .section {
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Shell (content container) */
+    .shell {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 100px 48px;
+    }
+
+    .shell--sm {
+      padding: 72px 48px;
+    }
+
+    /* Section header */
+    .section-header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 56px;
+    }
+
+    .section-header h2 {
+      font-family: var(--font-heading);
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .section-header p {
+      margin-top: 14px;
+      font-size: 1rem;
+      color: var(--c-muted);
+    }
+
+    /* Grid helpers */
+    .grid-2  { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+    .grid-3  { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    .grid-4  { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+    .grid-23 { display: grid; grid-template-columns: 2fr 3fr; gap: 0; }
+    .grid-32 { display: grid; grid-template-columns: 3fr 2fr; gap: 0; }
+
+    /* Feature row */
+    .feature-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .feature-row__icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--r-sm);
+      background: rgba(18,85,163,.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .feature-row__title {
+      font-weight: 700;
+      font-size: .95rem;
+      color: var(--c-text-dark);
+      margin-bottom: 4px;
+    }
+
+    .feature-row__text {
+      font-size: .84rem;
+      color: var(--c-muted);
+      line-height: 1.5;
+    }
+
+    /* Typography helpers */
+    h1, h2, h3 {
+      font-family: var(--font-heading);
+    }
+
+    .hero-h1 {
+      font-size: clamp(2.4rem, 4.5vw, 3.6rem);
+      font-weight: 900;
+      line-height: 1.1;
+      color: var(--c-text-dark);
+      letter-spacing: -.02em;
+    }
+
+    .hero-h1 em {
+      font-style: normal;
+      color: var(--c-orange);
+    }
+
+    .accent { color: var(--c-orange); }
+    .accent-blue { color: #7DB8F5; }
+
+    /* Bullet list with orange dots */
+    .dot-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .dot-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: .9rem;
+      color: rgba(255,255,255,.8);
+      line-height: 1.5;
+    }
+
+    .dot-list li::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--c-orange);
+      flex-shrink: 0;
+      margin-top: 8px;
+      box-shadow: 0 0 8px var(--c-orange);
+    }
+
+    /* Section number badge (top-right corner) */
+    .section-num {
+      position: absolute;
+      top: 28px;
+      right: 48px;
+      font-family: var(--font-number);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      color: rgba(255,255,255,.12);
+      z-index: 2;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .section-num--dark {
+      color: rgba(11,58,111,.15);
+    }
+
+    /* Accent border between same-tone adjacent sections */
+    .section-sep {
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+
+    .section-sep--light {
+      border-top: 1px solid rgba(18,85,163,.08);
+    }
+
+    /* Reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .6s ease, transform .6s ease;
+      will-change: transform, opacity;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+    .reveal-delay-4 { transition-delay: .4s; }
+    .reveal-delay-5 { transition-delay: .5s; }
+
+    /* ============================================================
+       SECTION 1: HERO
+    ============================================================ */
+    #hero {
+      min-height: 100vh;
+      background: linear-gradient(160deg, var(--c-base) 0%, var(--c-navy) 40%, #0B2A56 80%, #0D1F45 100%);
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 80% 50%, rgba(18,85,163,.22) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(33,87,164,.10) 0%, transparent 60%),
+        radial-gradient(ellipse 30% 30% at 70% 10%, rgba(30,107,184,.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 64px;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+
+    .hero-copy p.hero-lead {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,.75);
+      line-height: 1.7;
+      margin: 22px 0;
+      max-width: 540px;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 28px;
+      margin-top: 28px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(255,255,255,.1);
+      flex-wrap: wrap;
+    }
+
+    .hero-stat__num {
+      font-family: var(--font-number);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--c-text-dark);
+    }
+
+    .hero-stat__label {
+      font-size: .75rem;
+      color: rgba(255,255,255,.55);
+      margin-top: 2px;
+    }
+
+    .hero-stat__num .unit {
+      font-size: .9rem;
+      color: var(--c-orange-l);
+    }
+
+    /* Orbital visual */
+    .orbital-wrap {
+      position: relative;
+      width: 100%;
+      padding-bottom: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .orbital-inner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Glow halos */
+    .halo {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .halo-blue {
+      width: 380px; height: 380px;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      background: radial-gradient(circle, rgba(18,85,163,.35) 0%, transparent 70%);
+      animation: pulse-halo 4s ease-in-out infinite;
+    }
+
+    .halo-orange {
+      width: 260px; height: 260px;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      background: radial-gradient(circle, rgba(33,87,164,.2) 0%, transparent 70%);
+      animation: pulse-halo 4s ease-in-out infinite .5s;
+    }
+
+    @keyframes pulse-halo {
+      0%, 100% { opacity: .7; transform: translate(-50%,-50%) scale(1); }
+      50%       { opacity: 1;  transform: translate(-50%,-50%) scale(1.08); }
+    }
+
+    /* Orbit rings */
+    .orbit-ring {
+      position: absolute;
+      border-radius: 50%;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      pointer-events: none;
+    }
+
+    .orbit-ring-1 {
+      width: 420px; height: 420px;
+      border: 1.5px solid rgba(30,107,184,.35);
+      animation: spin-ring 22s linear infinite;
+      will-change: transform;
+    }
+
+    .orbit-ring-2 {
+      width: 320px; height: 320px;
+      border: 1px dashed rgba(33,87,164,.3);
+      animation: spin-ring 14s linear infinite reverse;
+      will-change: transform;
+    }
+
+    .orbit-ring-3 {
+      width: 220px; height: 220px;
+      border: 1.5px solid rgba(255,255,255,.12);
+      animation: spin-ring 10s linear infinite;
+      will-change: transform;
+    }
+
+    @keyframes spin-ring {
+      from { transform: translate(-50%,-50%) rotate(0deg); }
+      to   { transform: translate(-50%,-50%) rotate(360deg); }
+    }
+
+    @keyframes bounce-scroll {
+      0%, 100% { transform: translateX(-50%) translateY(0); opacity: .45; }
+      50%       { transform: translateX(-50%) translateY(8px); opacity: .7; }
+    }
+
+    /* Cover emblem animations */
+    @keyframes cover-spin-cw {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    @keyframes cover-spin-ccw {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(-360deg); }
+    }
+
+    @keyframes cover-pulse {
+      0%, 100% { box-shadow: 0 0 60px rgba(18,85,163,.5), 0 0 120px rgba(18,85,163,.2), inset 0 1px 0 rgba(255,255,255,.1); }
+      50%       { box-shadow: 0 0 80px rgba(18,85,163,.7), 0 0 160px rgba(18,85,163,.35), 0 0 40px rgba(33,87,164,.12), inset 0 1px 0 rgba(255,255,255,.15); }
+    }
+
+    @keyframes cover-zoom-in {
+      from { transform: scale(.6); opacity: 0; }
+      to   { transform: scale(1);  opacity: 1; }
+    }
+
+    @keyframes cover-scroll-line {
+      0%, 100% { transform: scaleY(1);   opacity: .28; }
+      50%       { transform: scaleY(.55); opacity: .45; }
+    }
+
+    @keyframes node-halo-pulse {
+      0%, 100% { transform: scale(1);    opacity: 1; }
+      50%       { transform: scale(1.2);  opacity: .55; }
+    }
+
+    .node-halo {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: node-halo-pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes blob-drift-1 {
+      0%, 100% { transform: translate(0, 0)    scale(1); }
+      33%       { transform: translate(6%, 4%)  scale(1.06); }
+      66%       { transform: translate(-3%, 7%) scale(.96); }
+    }
+
+    @keyframes blob-drift-2 {
+      0%, 100% { transform: translate(0, 0)     scale(1); }
+      33%       { transform: translate(-7%, -4%) scale(1.08); }
+      66%       { transform: translate(4%, -6%)  scale(.94); }
+    }
+
+    @keyframes stat-border-glow {
+      0%, 100% { border-color: rgba(255,255,255,.07); }
+      50%       { border-color: rgba(33,87,164,.18); }
+    }
+
+    /* Dot pulse para eyebrow pill */
+    @keyframes portada-dot-pulse {
+      0%, 100% { box-shadow: 0 0 6px 2px rgba(33,87,164,.65); opacity:1; }
+      50%       { box-shadow: 0 0 12px 4px rgba(33,87,164,.30); opacity:.7; }
+    }
+
+    /* Portada load animations — fire on page load, no scroll trigger */
+    @keyframes portada-fade-up {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .portada-load-1 { opacity: 0; animation: portada-fade-up .7s cubic-bezier(.22,1,.36,1) forwards .16s; }
+    .portada-load-2 { opacity: 0; animation: portada-fade-up .9s cubic-bezier(.22,1,.36,1) forwards .44s; }
+    .portada-load-3 { opacity: 0; animation: portada-fade-up .8s cubic-bezier(.22,1,.36,1) forwards .62s; }
+    .portada-load-4 { opacity: 0; animation: portada-fade-up .8s cubic-bezier(.22,1,.36,1) forwards .80s; }
+
+    /* Floating nodes */
+    .orbital-node {
+      position: absolute;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      animation: node-float 6s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    @keyframes node-float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-10px); }
+    }
+
+    .orbital-node--1 {
+      width: 48px; height: 48px;
+      background: var(--c-white);
+      color: var(--c-blue-900);
+      top: 5%; left: 50%;
+      box-shadow: 0 0 20px rgba(255,255,255,.3);
+      animation-delay: 0s;
+    }
+
+    .orbital-node--2 {
+      width: 40px; height: 40px;
+      background: var(--c-blue-500);
+      color: white;
+      top: 55%; left: 5%;
+      box-shadow: 0 0 20px rgba(30,107,184,.4);
+      animation-delay: 1.2s;
+    }
+
+    .orbital-node--3 {
+      width: 44px; height: 44px;
+      background: var(--c-orange);
+      color: white;
+      top: 20%; right: 3%;
+      box-shadow: 0 0 20px rgba(33,87,164,.4);
+      animation-delay: 2.5s;
+    }
+
+    /* Central circle */
+    .orbital-center {
+      position: relative;
+      z-index: 10;
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background: rgba(7,24,48,.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1.5px solid rgba(255,255,255,.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 0 40px rgba(18,85,163,.4), inset 0 1px 0 rgba(255,255,255,.12);
+      text-align: center;
+      padding: 14px;
+    }
+
+    .orbital-center__brand {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--c-text-dark);
+      letter-spacing: .05em;
+    }
+
+    .orbital-center__sub {
+      font-size: .58rem;
+      color: rgba(255,255,255,.6);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      line-height: 1.4;
+    }
+
+    /* ORSAN SVG Logo */
+    .orsan-logo-svg {
+      width: 52px;
+      height: auto;
+    }
+
+    /* Hero KPI cards row */
+    .hero-kpi-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      justify-content: center;
+    }
+
+    .hero-kpi-card {
+      flex: 1;
+      max-width: 150px;
+      background: rgba(255,255,255,.06);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--r-md);
+      padding: 14px 12px;
+      text-align: center;
+    }
+
+    .hero-kpi-card__num {
+      font-family: var(--font-number);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--c-orange-l);
+      line-height: 1;
+    }
+
+    .hero-kpi-card__label {
+      font-size: .68rem;
+      color: rgba(255,255,255,.6);
+      margin-top: 5px;
+      line-height: 1.35;
+    }
+
+    /* ============================================================
+       SECTION 2: QUIÉNES SOMOS
+    ============================================================ */
+    #quienes-somos {
+      min-height: 80vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .qs-left {
+      background: linear-gradient(135deg, var(--c-blue-900) 0%, #04224A 100%);
+      padding: 100px 60px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .qs-left::before {
+      content: '40';
+      position: absolute;
+      right: -20px; top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--font-number);
+      font-size: 18rem;
+      font-weight: 900;
+      color: rgba(255,255,255,.04);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .qs-left h2 {
+      font-size: 2.2rem;
+      font-weight: 900;
+      line-height: 1.15;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+
+    .qs-left p {
+      font-size: .95rem;
+      color: rgba(255,255,255,.7);
+      line-height: 1.7;
+      max-width: 440px;
+      margin-bottom: 32px;
+    }
+
+    .qs-kpi-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .qs-right {
+      background: var(--c-white);
+      padding: 100px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .qs-right h3 {
+      font-size: 1.55rem;
+      font-weight: 800;
+      line-height: 1.25;
+      color: var(--c-text-dark);
+      margin-bottom: 32px;
+    }
+
+    /* ============================================================
+       SECTION 3: SERVICIOS
+    ============================================================ */
+    #servicios {
+      background: var(--c-off-white);
+    }
+
+    #servicios .section-header h2 {
+      color: var(--c-text-dark);
+    }
+
+    /* ============================================================
+       SECTION 4: MODELO
+    ============================================================ */
+    #modelo {
+      background: linear-gradient(160deg, var(--c-base) 0%, #071030 50%, var(--c-navy) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #modelo::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 50% 50% at 100% 0%, rgba(18,85,163,.15) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 0% 100%, rgba(33,87,164,.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    #modelo .section-header h2 {
+      color: var(--c-text-dark);
+    }
+
+    #modelo .section-header p {
+      color: rgba(255,255,255,.55);
+    }
+
+    /* Value chain */
+    .chain-label {
+      text-align: center;
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.45);
+      margin-bottom: 32px;
+    }
+
+    .chain-label span {
+      color: var(--c-orange-l);
+    }
+
+    .chain-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .chain-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .chain-circle {
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.07);
+      border: 1.5px solid rgba(255,255,255,.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-number);
+      font-size: .72rem;
+      font-weight: 700;
+      color: rgba(255,255,255,.9);
+      text-align: center;
+      line-height: 1.2;
+      transition: transform .3s ease;
+      cursor: default;
+      padding: 8px;
+    }
+
+    .chain-circle:hover {
+      transform: scale(1.1);
+    }
+
+    .chain-circle .p-num {
+      font-size: .62rem;
+      color: var(--c-orange-l);
+      font-weight: 800;
+      letter-spacing: .05em;
+    }
+
+    .chain-circle--final {
+      width: 88px;
+      height: 88px;
+      background: linear-gradient(135deg, var(--c-blue-700), var(--c-orange));
+      border: none;
+      font-size: .78rem;
+      box-shadow: 0 0 24px rgba(33,87,164,.35);
+    }
+
+    .chain-line {
+      height: 2px;
+      width: 28px;
+      flex-shrink: 0;
+      background: linear-gradient(90deg, rgba(30,107,184,.5), rgba(33,87,164,.5));
+    }
+
+    .chain-node-label {
+      font-size: .7rem;
+      color: rgba(255,255,255,.5);
+      text-align: center;
+      max-width: 84px;
+      line-height: 1.3;
+    }
+
+    /* ============================================================
+       SECTION 5: TECNOLOGÍA
+    ============================================================ */
+    #tecnologia {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 80vh;
+    }
+
+    .tech-left {
+      background: linear-gradient(135deg, var(--c-base) 0%, #061428 100%);
+      padding: 100px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .tech-left h2 {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .tech-left p {
+      font-size: .93rem;
+      color: rgba(255,255,255,.68);
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .tech-right {
+      background: var(--c-off-white);
+      padding: 100px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .tech-right h3 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--c-text-dark);
+      margin-bottom: 28px;
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .tool-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .tool-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: .78rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: var(--r-pill);
+      background: var(--c-white);
+      border: 1px solid var(--c-line-d);
+      color: var(--c-text-mid);
+      box-shadow: 0 2px 8px rgba(4,12,26,.06);
+    }
+
+    /* ============================================================
+       SECTION 6: SATISFACCIÓN
+    ============================================================ */
+    #satisfaccion {
+      background: var(--c-off-white);
+    }
+
+    #satisfaccion .section-header h2 {
+      color: var(--c-text-dark);
+    }
+
+    .satis-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .satis-left {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .satis-right {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Big score card */
+    .score-card {
+      background: var(--c-white);
+      border-radius: var(--r-xl);
+      padding: 32px 32px 28px;
+      box-shadow: var(--sh-md);
+    }
+
+    .score-card__score {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .score-card__num {
+      font-family: var(--font-number);
+      font-size: 5rem;
+      font-weight: 700;
+      color: var(--c-blue-900);
+      line-height: 1;
+    }
+
+    .score-card__denom {
+      font-family: var(--font-number);
+      font-size: 1.6rem;
+      color: var(--c-muted);
+    }
+
+    .score-card__label {
+      font-size: .88rem;
+      color: var(--c-muted);
+      margin-bottom: 20px;
+    }
+
+    .score-progress {
+      margin-top: 16px;
+    }
+
+    .score-progress__header {
+      display: flex;
+      justify-content: space-between;
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--c-text-mid);
+      margin-bottom: 6px;
+    }
+
+    .score-progress__track {
+      height: 10px;
+      border-radius: var(--r-pill);
+      background: var(--c-line-d);
+      overflow: hidden;
+    }
+
+    .score-progress__fill {
+      height: 100%;
+      border-radius: var(--r-pill);
+      background: linear-gradient(90deg, var(--c-green), #34D399);
+      width: 0%;
+      transition: width 1.4s cubic-bezier(.4,0,.2,1);
+      will-change: width;
+    }
+
+    /* Fortalezas card */
+    .fortalezas-card {
+      background: var(--c-white);
+      border-radius: var(--r-lg);
+      padding: 28px;
+      box-shadow: var(--sh-md);
+    }
+
+    .fortalezas-card h4 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--c-text-dark);
+      margin-bottom: 20px;
+    }
+
+    /* NPS Card */
+    .nps-card {
+      background: linear-gradient(135deg, var(--c-blue-900), var(--c-blue-700));
+      border-radius: var(--r-xl);
+      padding: 32px;
+      color: var(--c-text-dark);
+    }
+
+    .nps-card__label {
+      font-size: .82rem;
+      color: rgba(255,255,255,.65);
+      margin-bottom: 8px;
+    }
+
+    .nps-card__pct {
+      font-family: var(--font-number);
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: var(--c-orange-l);
+      line-height: 1;
+    }
+
+    .nps-card__sub {
+      font-size: .9rem;
+      color: rgba(255,255,255,.75);
+      margin-top: 4px;
+      margin-bottom: 22px;
+    }
+
+    .loyalty-bar {
+      height: 12px;
+      border-radius: var(--r-pill);
+      overflow: hidden;
+      display: flex;
+      margin-bottom: 10px;
+    }
+
+    .loyalty-bar__seg {
+      height: 100%;
+      transition: width 1.2s ease;
+    }
+
+    .lb-green  { background: var(--c-green); }
+    .lb-yellow { background: #F59E0B; }
+    .lb-red    { background: #EF4444; }
+
+    .loyalty-legend {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .loyalty-legend__item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: .75rem;
+      color: rgba(255,255,255,.7);
+    }
+
+    /* Quote block */
+    .quote-block {
+      background: var(--c-white);
+      border-radius: var(--r-lg);
+      padding: 24px 26px;
+      box-shadow: var(--sh-md);
+      border-left: 4px solid var(--c-blue-500);
+    }
+
+    .quote-block p {
+      font-size: .93rem;
+      font-style: italic;
+      color: var(--c-text-mid);
+      line-height: 1.7;
+    }
+
+    /* Distribution card */
+    .distrib-card {
+      background: var(--c-white);
+      border-radius: var(--r-lg);
+      padding: 24px 26px;
+      box-shadow: var(--sh-md);
+    }
+
+    .distrib-card h4 {
+      font-size: .9rem;
+      font-weight: 700;
+      color: var(--c-text-dark);
+      margin-bottom: 16px;
+    }
+
+    .distrib-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .distrib-row__dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .distrib-row__text {
+      font-size: .84rem;
+      color: var(--c-text-mid);
+    }
+
+    .distrib-row__count {
+      margin-left: auto;
+      font-family: var(--font-number);
+      font-size: .9rem;
+      font-weight: 700;
+      color: var(--c-text-dark);
+    }
+
+    /* ============================================================
+       SECTION 7: LEALTAD
+    ============================================================ */
+    #lealtad {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 80vh;
+    }
+
+    .lealtad-left {
+      background: linear-gradient(135deg, #04224A, var(--c-blue-900));
+      padding: 100px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .lealtad-left h2 {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--c-text-dark);
+      line-height: 1.2;
+      margin-bottom: 24px;
+    }
+
+    .lealtad-highlight {
+      background: rgba(33,87,164,.12);
+      border: 1px solid rgba(33,87,164,.3);
+      border-radius: var(--r-md);
+      padding: 18px 20px;
+      margin-top: 8px;
+    }
+
+    .lealtad-highlight p {
+      font-size: .92rem;
+      color: var(--c-orange-l);
+      font-weight: 600;
+      line-height: 1.55;
+    }
+
+    .lealtad-right {
+      background: var(--c-white);
+      padding: 80px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .lealtad-right h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--c-text-dark);
+      margin-bottom: 8px;
+    }
+
+    .lealtad-right p.chart-sub {
+      font-size: .83rem;
+      color: var(--c-muted);
+      margin-bottom: 24px;
+    }
+
+    .chart-container {
+      position: relative;
+      width: 100%;
+      height: 280px;
+    }
+
+    /* Timeline milestones */
+    .timeline {
+      display: flex;
+      gap: 0;
+      margin-top: 28px;
+      border-top: 2px solid var(--c-line-d);
+      padding-top: 20px;
+    }
+
+    .timeline-item {
+      flex: 1;
+      text-align: center;
+      position: relative;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      top: -26px; left: 50%;
+      transform: translateX(-50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--c-blue-500);
+    }
+
+    .timeline-item--special::before {
+      background: var(--c-orange);
+      width: 14px;
+      height: 14px;
+      top: -28px;
+    }
+
+    .timeline-item__year {
+      font-family: var(--font-number);
+      font-size: .9rem;
+      font-weight: 700;
+      color: var(--c-blue-900);
+    }
+
+    .timeline-item__note {
+      font-size: .72rem;
+      color: var(--c-muted);
+      margin-top: 3px;
+      line-height: 1.35;
+    }
+
+    /* ============================================================
+       SECTION 8: POR QUÉ ELEGIRNOS
+    ============================================================ */
+    #por-que {
+      background: var(--c-off-white);
+    }
+
+    #por-que .section-header h2 {
+      color: var(--c-text-dark);
+    }
+
+    /* ============================================================
+       SECTION 9: RUBROS + CALIDAD
+    ============================================================ */
+    #rubros {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 70vh;
+    }
+
+    .rubros-left {
+      background: var(--c-off-white);
+      padding: 80px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .rubros-left h2 {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--c-text-dark);
+      margin-bottom: 8px;
+    }
+
+    .rubros-left p.rubro-lead {
+      font-size: .9rem;
+      color: var(--c-muted);
+      margin-bottom: 28px;
+    }
+
+    .rubro-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .cobertura-note {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .8rem;
+      color: var(--c-muted);
+      margin-top: 8px;
+    }
+
+    .cobertura-note::before {
+      content: '🌐';
+      font-size: .9rem;
+    }
+
+    .calidad-right {
+      background: linear-gradient(135deg, var(--c-base) 0%, #061428 100%);
+      padding: 80px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .calidad-right h3 {
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: var(--c-text-dark);
+      line-height: 1.25;
+      margin-bottom: 28px;
+    }
+
+    .cert-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* ============================================================
+       SECTION 10: CIERRE
+    ============================================================ */
+    #cierre {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      background: linear-gradient(160deg, var(--c-base) 0%, var(--c-navy) 40%, #0B2A56 80%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #cierre::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 50%, rgba(18,85,163,.2) 0%, transparent 70%),
+        radial-gradient(ellipse 30% 30% at 80% 20%, rgba(33,87,164,.1) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .cierre-inner {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      width: 100%;
+    }
+
+    .cierre-inner h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.2;
+      max-width: 680px;
+      margin: 24px auto 16px;
+    }
+
+    .cierre-inner p {
+      font-size: 1rem;
+      color: rgba(255,255,255,.65);
+      max-width: 560px;
+      margin: 0 auto 48px;
+      line-height: 1.7;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .contact-card {
+      background: rgba(255,255,255,.06);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--r-lg);
+      padding: 32px 20px;
+      text-align: center;
+      transition: background .25s ease, border-color .25s ease, transform .25s ease;
+      will-change: transform;
+    }
+
+    .contact-card:hover {
+      background: rgba(255,255,255,.1);
+      border-color: rgba(255,255,255,.2);
+      transform: translateY(-3px);
+    }
+
+    .contact-card__icon {
+      font-size: 1.8rem;
+      margin-bottom: 14px;
+    }
+
+    .contact-card__title {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.45);
+      margin-bottom: 10px;
+    }
+
+    .contact-card__value {
+      font-size: .95rem;
+      font-weight: 600;
+      color: rgba(255,255,255,.9);
+      line-height: 1.6;
+    }
+
+    .contact-card__value a {
+      color: #fff;
+      text-shadow: 0 0 12px rgba(255,255,255,.3);
+    }
+
+    /* Logo cierre */
+    .cierre-logo {
+      margin: 0 auto;
+      width: fit-content;
+    }
+
+    .cierre-logo__mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(7,24,48,.65);
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: var(--r-lg);
+      padding: 18px 36px;
+      box-shadow: 0 8px 32px rgba(4,12,26,.35);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .cierre-logo__name {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: .06em;
+    }
+
+    .cierre-logo__sub {
+      font-size: .72rem;
+      color: rgba(255,255,255,.5);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    /* ============================================================
+       DARK-SECTION H2 OVERRIDES
+       (sections that use dark backgrounds but inherit body dark text)
+    ============================================================ */
+    #como .section-header h2,
+    #bi-quien .section-header h2,
+    #bi-cuando .section-header h2,
+    #operaciones .section-header h2,
+    #magnitud .section-header h2,
+    #resultados .section-header h2,
+    #voz .section-header h2 {
+      color: #fff;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 1100px) {
+      .shell { padding: 72px 32px; }
+      .hero-grid { gap: 40px; }
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .chain-wrap { gap: 0; }
+      .chain-line { width: 18px; }
+      .contact-grid { grid-template-columns: repeat(2, 1fr); }
+
+      #quienes-somos { grid-template-columns: 1fr; }
+      .qs-left, .qs-right { padding: 72px 48px; }
+
+      #orsan-intro { grid-template-columns: 1fr; }
+      #orsan-intro .qs-left, #orsan-intro .qs-right { padding: 72px 48px; }
+
+      #centro-ops { grid-template-columns: 1fr; }
+      #centro-ops > div { padding: 72px 48px !important; }
+
+      #tecnologia { grid-template-columns: 1fr; }
+      .tech-left, .tech-right { padding: 72px 48px; }
+    }
+
+    @media (max-width: 720px) {
+      .shell { padding: 56px 20px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+      .orbital-wrap { max-width: 340px; }
+      .orbit-ring-1 { width: 280px; height: 280px; }
+      .orbit-ring-2 { width: 210px; height: 210px; }
+      .orbit-ring-3 { width: 150px; height: 150px; }
+      .halo-blue { width: 260px; height: 260px; }
+      .halo-orange { width: 180px; height: 180px; }
+      .orbital-center { width: 120px; height: 120px; }
+      .orbital-center__brand { font-size: 1rem; }
+      .orbital-node--1 { width: 36px; height: 36px; }
+      .orbital-node--2 { width: 32px; height: 32px; }
+      .orbital-node--3 { width: 36px; height: 36px; }
+      .orsan-logo-svg { width: 36px; }
+
+      .grid-2, .grid-3, .satis-grid, .qs-kpi-row, .tech-grid,
+      .rubro-grid { grid-template-columns: 1fr; }
+      .chain-wrap { justify-content: flex-start; padding: 16px; }
+      #nav-rail { display: none; }
+      .contact-grid { grid-template-columns: 1fr 1fr; }
+      .qs-left, .qs-right { padding: 56px 24px; }
+      #orsan-intro .qs-left, #orsan-intro .qs-right { padding: 56px 24px; }
+      #centro-ops { grid-template-columns: 1fr; }
+      #centro-ops > div { padding: 56px 24px !important; }
+      .tech-left, .tech-right { padding: 56px 24px; }
+      .section-header h2 { font-size: 1.7rem; }
+      .hero-h1 { font-size: 2rem; }
+
+      /* Portada split — mobile */
+      .portada-split { flex-direction: column !important; padding: 0 24px 48px !important; gap: 40px !important; justify-content: center !important; }
+      .portada-emblem { display: none !important; }
+      .portada-stats { gap: 24px !important; flex-wrap: wrap; }
+    }
+
+    @media (max-width: 1100px) and (min-width: 721px) {
+      /* Portada split — tablet */
+      .portada-emblem { width: 180px !important; height: 180px !important; }
+    }
+
+    /* ============================================================
+       MODO PRESENTACIÓN
+    ============================================================ */
+    #btn-presentar {
+      position: fixed;
+      bottom: 28px;
+      left: 28px;
+      z-index: 1000;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #1E5FAA 0%, #2D6BBF 100%);
+      color: #fff;
+      border: none;
+      border-radius: 9999px;
+      padding: 11px 22px 11px 16px;
+      font-family: var(--font-body);
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(33,87,164,.45), 0 0 0 1px rgba(45,107,191,.3);
+      transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
+      user-select: none;
+    }
+    #btn-presentar:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(33,87,164,.55), 0 0 0 1px rgba(45,107,191,.5);
+    }
+    #btn-presentar svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+    /* Barra de controles (visible solo en modo presentación) */
+    #pres-controls {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      gap: 12px;
+      background: rgba(7,16,48,.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 9999px;
+      padding: 8px 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.4);
+    }
+    #pres-controls.visible { display: flex; }
+
+    .pres-nav-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      color: rgba(255,255,255,.9);
+      font-size: 1rem;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background .2s ease;
+      flex-shrink: 0;
+    }
+    .pres-nav-btn:hover { background: rgba(255,255,255,.18); }
+    .pres-nav-btn:disabled { opacity: .3; cursor: default; }
+
+    #pres-counter {
+      font-family: var(--font-number);
+      font-size: .82rem;
+      font-weight: 700;
+      color: rgba(255,255,255,.85);
+      letter-spacing: .05em;
+      min-width: 52px;
+      text-align: center;
+    }
+
+    #pres-slide-name {
+      font-size: .7rem;
+      font-weight: 500;
+      color: rgba(255,255,255,.4);
+      letter-spacing: .04em;
+      max-width: 140px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #pres-exit-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-body);
+      font-size: .72rem;
+      font-weight: 600;
+      color: rgba(255,255,255,.45);
+      cursor: pointer;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: transparent;
+      transition: color .2s, background .2s;
+      margin-left: 4px;
+    }
+    #pres-exit-btn:hover { color: #fff; background: rgba(255,255,255,.1); }
+
+    /* Indicador de diapositiva (barra progreso arriba en modo pres) */
+    #pres-slide-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--c-blue-500), var(--c-orange-l));
+      z-index: 9999;
+      width: 0%;
+      transition: width .35s ease;
+      display: none;
+    }
+    #pres-slide-bar.visible { display: block; }
+
+    /* Snapshot overlay al entrar */
+    @keyframes pres-fade-in {
+      from { opacity: 0; } to { opacity: 1; }
+    }
+    body.presentation-mode { overflow: hidden; }
+    body.presentation-mode .section {
+      min-height: 100vh !important;
+      scroll-snap-align: start;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div id="scroll-progress"></div>
+  <div id="pres-slide-bar"></div>
+
+  <!-- ── BOTÓN MODO PRESENTACIÓN ── -->
+  <button id="btn-presentar" title="Activar modo presentación">
+    <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="1" y="2" width="14" height="9" rx="1.5" stroke="white" stroke-width="1.4"/>
+      <path d="M5 13.5H11M8 11V13.5" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+      <polygon points="5.5,5 5.5,8.5 10.5,6.75" fill="white"/>
+    </svg>
+    Presentar
+  </button>
+
+  <!-- ── CONTROLES MODO PRESENTACIÓN ── -->
+  <div id="pres-controls" role="toolbar" aria-label="Controles de presentación">
+    <button class="pres-nav-btn" id="pres-prev" title="Diapositiva anterior (←)">&#8592;</button>
+    <span id="pres-counter">1 / 16</span>
+    <span id="pres-slide-name">Portada</span>
+    <button class="pres-nav-btn" id="pres-next" title="Siguiente diapositiva (→)">&#8594;</button>
+    <button id="pres-exit-btn" title="Salir (Esc)">&#x2715; Salir</button>
+  </div>
+
+  <nav id="nav-rail" aria-label="Secciones">
+    <div class="nav-dot" data-target="#portada"      title="Portada"></div>
+    <div class="nav-dot" data-target="#quienes"      title="Quiénes somos"></div>
+    <div class="nav-dot" data-target="#servicios"    title="Nuestros servicios"></div>
+    <div class="nav-dot" data-target="#operaciones"  title="Centro de operaciones"></div>
+    <div class="nav-dot" data-target="#magnitud"     title="Magnitud de la operación"></div>
+    <div class="nav-dot" data-target="#como"         title="Cómo lo hacemos"></div>
+    <div class="nav-dot" data-target="#tecnologia"   title="Tecnología"></div>
+    <div class="nav-dot" data-target="#bi-quien"     title="BI · El quién"></div>
+    <div class="nav-dot" data-target="#bi-cuando"    title="BI · El cuándo"></div>
+    <div class="nav-dot" data-target="#calidad"      title="Calidad"></div>
+    <div class="nav-dot" data-target="#voz"          title="Voz del cliente"></div>
+    <div class="nav-dot" data-target="#fidelidad"    title="Fidelidad"></div>
+    <div class="nav-dot" data-target="#industrias"   title="Industrias"></div>
+    <div class="nav-dot" data-target="#ventajas"     title="Ventajas"></div>
+    <div class="nav-dot" data-target="#resultados"   title="Resultados"></div>
+    <div class="nav-dot" data-target="#cierre"       title="Contacto"></div>
+  </nav>
+
+  <!-- ============================================================
+       S1: PORTADA — redesign estético 2026
+  ============================================================ -->
+  <section id="portada" class="section" style="min-height:100vh;background:#173E7A;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+
+    <!-- Canvas — fondo luminoso (screen compositing) -->
+    <canvas id="portada-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></canvas>
+
+    <!-- Vignette superior fuerte (oscurece top para que el navbar flote) + inferior suave -->
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(23,62,122,.78) 0%,rgba(23,62,122,.0) 18%,rgba(23,62,122,.0) 68%,rgba(23,62,122,.90) 100%);pointer-events:none;z-index:1;"></div>
+
+    <!-- Dot grid ultra sutil -->
+    <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.010) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:1;"></div>
+
+    <!-- ── TOP BAR ── -->
+    <div style="position:absolute;top:0;left:0;right:0;padding:26px 56px;display:flex;justify-content:space-between;align-items:center;z-index:4;">
+
+      <div class="portada-load-1" style="display:flex;align-items:center;gap:16px;">
+
+        <!-- Logo ORSAN oficial — versión blanca completa -->
+        <svg viewBox="0 0 792 612" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;height:72px;width:auto;">
+          <path fill="white" d="M151.09,210.39l-12.86,12.89.11.02-52.66,52.67-.04-.04-10.83,10.83.04.04-.04.04,10.84,10.84.04-.04,20.25,20.25,10.84-10.84-20.25-20.25,57.47-57.48c32.22,17.28,44.33,57.4,27.05,89.62-12.85,23.96-39.05,37.63-66.05,34.46l-12.47,12.47c43.69,11,88.03-15.5,99.02-59.19,10.14-40.26-11.59-81.72-50.46-96.3"/>
+          <path fill="white" d="M170.29,286.76l-10.84-10.84-.04.04-20.36-20.36-10.84,10.85,20.36,20.36-58.52,58.52c-31.87-17.95-43.15-58.33-25.21-90.2,11.74-20.84,33.79-33.73,57.71-33.73,2.05,0,4.08.11,6.07.29l13.95-13.95c-43.69-11-88.02,15.51-99.02,59.2-10.12,40.21,11.54,81.62,50.34,96.24l11.57-11.57h-.02l53.96-53.96.04.04,10.84-10.84-.04-.04.06-.04Z"/>
+          <path fill="white" d="M284.74,230.37c30.19-.06,54.71,24.36,54.77,54.55.06,30.19-24.36,54.71-54.55,54.77-30.19.06-54.71-24.36-54.77-54.55,0-.05,0-.1,0-.15-.49-29.67,23.16-54.13,52.83-54.62.57,0,1.15,0,1.72,0M284.68,314.76c17.12.01,28.39-12.14,28.41-29.71.01-17.72-11.24-29.74-28.36-29.76-16.97-.01-28.24,11.99-28.26,29.71-.01,17.57,11.24,29.74,28.21,29.76"/>
+          <path fill="white" d="M381.34,253.97l-.06,81.41-25.19-.02.08-104.95,39.13.03c26.39.02,42.27,14.41,42.25,36.01-.01,14.09-6.76,24.58-18.91,30.27l23.21,38.7-25.23-.02-29.45-52.43h8.47c8.39-.01,15.2-6.81,15.23-15.2h0c0-8.34-5.95-13.79-14.29-13.79l-15.24-.02Z"/>
+          <path fill="white" d="M509.05,265.97c-2.19-8.19-9.68-13.83-18.16-13.68-7.51,0-11.87,3.74-11.87,7.95,0,6.91,10.51,9.47,23.27,14.14,15.61,5.72,31.98,14.59,31.96,32.61-.01,19.22-16.54,32.87-41.02,32.86-21.93-.02-37.54-12.19-44.43-31.87l24.18-6.44c2.94,9.34,11.52,15.76,21.31,15.93,9.01,0,13.22-4.19,13.22-9.3,0-8.41-12.3-10.52-27.32-16.24-12.61-4.82-27.18-11.74-27.17-30.21.01-16.37,16.54-31.22,39.37-31.21,20.12.02,36.03,12.34,40.98,28.86l-24.32,6.59Z"/>
+          <path fill="white" d="M611.82,319.06l-41.53-.03-6.01,16.49-27.14-.02,42.06-104.92,23.84.02,41.9,104.98-27.14-.02-5.98-16.5ZM603.75,297.02l-7.48-20.4c-2.24-6-4.93-15.44-5.09-15.45h-.15c-.15,0-2.86,9.44-5.11,15.44l-7.51,20.38,25.34.02Z"/>
+          <path fill="white" d="M750.94,230.71l-.08,104.95-23.98-.02-21.41-29.25c-9.59-13.2-23.66-33.15-23.81-33.15h-.15c-.15,0,.14,16.19.12,39.13l-.02,23.24-25.19-.02.08-104.95,23.69.02,22.32,30c6.74,8.99,22.77,31.65,22.92,31.65h.15c.15,0-.14-18.59-.12-37.63l.02-23.99,25.47.02Z"/>
+          <path fill="rgba(255,255,255,0.6)" d="M659.12,406.75c-4.03,0-7.45-.95-10.28-2.85-2.83-1.9-4.83-4.66-6-8.28-.81-2.44-1.22-6.67-1.22-12.69s.41-10.24,1.22-12.69c1.18-3.62,3.18-6.38,6-8.28,2.83-1.9,6.25-2.85,10.28-2.85s7.52.95,10.35,2.85c2.83,1.9,4.83,4.66,6,8.28.81,2.44,1.22,6.67,1.22,12.69s-.41,10.24-1.22,12.69c-1.18,3.62-3.18,6.38-6,8.28-2.83,1.9-6.28,2.85-10.35,2.85ZM659.12,399.56c4.34,0,7.21-2.01,8.62-6.04.54-1.67.81-5.2.81-10.58s-.27-8.86-.81-10.58c-1.4-4.02-4.27-6.04-8.62-6.04s-7.15,2.01-8.55,6.04c-.54,1.72-.81,5.25-.81,10.58s.27,8.91.81,10.58c1.4,4.03,4.25,6.04,8.55,6.04Z"/>
+          <path fill="rgba(255,255,255,0.6)" d="M710.95,406h-6.24c-.45,0-.68-.23-.68-.68v-18.86c0-2.17-.53-3.9-1.59-5.19-1.06-1.29-2.59-1.93-4.58-1.93s-3.47.66-4.58,1.97c-1.11,1.31-1.66,3.03-1.66,5.16v18.86c0,.45-.23.68-.68.68h-6.24c-.45,0-.68-.23-.68-.68v-31.34c0-.45.23-.68.68-.68h6.24c.45,0,.68.23.68.68v2.38h.07c1.76-2.53,4.64-3.8,8.62-3.8,3.44,0,6.18,1.13,8.24,3.39,2.06,2.26,3.09,5.18,3.09,8.75v20.63c0,.45-.23.68-.68.68Z"/>
+          <path fill="rgba(255,255,255,0.6)" d="M732.87,406.75c-3.44,0-6.34-.8-8.72-2.41-2.38-1.6-4.01-3.83-4.92-6.68-.77-2.4-1.15-5.06-1.15-8.01,0-3.12.36-5.81,1.09-8.07.9-2.85,2.54-5.06,4.92-6.65,2.38-1.58,5.19-2.37,8.45-2.37s6.2.8,8.55,2.41c2.35,1.61,3.98,3.81,4.88,6.62.72,2.22,1.09,5.49,1.09,9.84,0,.45-.25.68-.75.68h-20.15c-.27,0-.41.14-.41.41,0,.81.16,1.65.48,2.51,1.13,3.3,3.57,4.95,7.33,4.95,3.21,0,5.77-1.04,7.67-3.12.36-.36.7-.41,1.02-.13l4,3.53c.32.27.34.59.07.95-3.17,3.71-7.64,5.56-13.43,5.56ZM739.38,385.99c0-1.04-.14-1.97-.41-2.78-.45-1.31-1.24-2.34-2.37-3.09-1.13-.75-2.47-1.12-4-1.12-3.35,0-5.5,1.4-6.45,4.2-.27.81-.41,1.74-.41,2.78,0,.27.14.41.41.41h12.82c.27,0,.41-.14.41-.41Z"/>
+        </svg>
+      </div>
+
+      <span class="portada-load-1" style="font-size:.52rem;font-weight:400;letter-spacing:.30em;text-transform:uppercase;color:rgba(255,255,255,.12);">Presentación Comercial · 2026</span>
+    </div>
+
+    <!-- ── CONTENIDO CENTRAL ── -->
+    <div style="position:relative;z-index:3;width:100%;max-width:980px;padding:0 56px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:0;">
+
+      <!-- Eyebrow — pill badge naranja con punto pulsante -->
+      <div class="portada-load-1" style="display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(33,87,164,.22);border-radius:9999px;padding:7px 20px 7px 12px;background:rgba(33,87,164,.07);margin-bottom:30px;">
+        <span style="width:6px;height:6px;border-radius:50%;background:#2157A4;display:inline-block;box-shadow:0 0 7px 2px rgba(33,87,164,.7);flex-shrink:0;animation:portada-dot-pulse 2.2s ease-in-out infinite;"></span>
+        <span style="font-size:.58rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.42);">Seguros &nbsp;·&nbsp; Factoring &nbsp;·&nbsp; Cobranzas &nbsp;·&nbsp; Cheque</span>
+      </div>
+
+      <!-- Headline — peso ultra light para contraste máximo con el bold -->
+      <h1 class="portada-load-2" style="font-family:var(--font-heading);font-size:clamp(2.5rem,5.6vw,6.8rem);font-weight:200;line-height:.97;letter-spacing:-.038em;color:rgba(255,255,255,.88);margin:0 0 28px;padding:0;max-width:860px;">
+        Soluciones financieras<br>para tu <span style="font-weight:800;background:linear-gradient(110deg,#fff 0%,#A8C8F0 28%,#4B8FD4 72%,#2157A4 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">empresa</span><br><span style="color:rgba(255,255,255,.35);font-weight:200;"></span>
+      </h1>
+
+      <!-- Métricas clave — 3 KPIs horizontales -->
+      <div class="portada-load-3" style="display:flex;align-items:center;margin-bottom:28px;">
+        <div style="text-align:center;padding:0 36px;">
+          <div style="font-family:var(--font-number);font-size:2rem;font-weight:700;color:rgba(255,255,255,.92);line-height:1;letter-spacing:-.03em;">40<span style="font-size:1.1rem;color:#2157A4;font-weight:600;">+</span></div>
+          <div style="font-size:.54rem;letter-spacing:.20em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-top:6px;">Años de experiencia</div>
+        </div>
+        <div style="width:1px;height:36px;background:rgba(255,255,255,.1);"></div>
+        <div style="text-align:center;padding:0 36px;">
+          <div style="font-family:var(--font-number);font-size:2rem;font-weight:700;color:rgba(255,255,255,.92);line-height:1;letter-spacing:-.03em;">150<span style="font-size:1.1rem;color:#2157A4;font-weight:600;">+</span></div>
+          <div style="font-size:.54rem;letter-spacing:.20em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-top:6px;">Especialistas</div>
+        </div>
+        <div style="width:1px;height:36px;background:rgba(255,255,255,.1);"></div>
+        <div style="text-align:center;padding:0 36px;">
+          <div style="font-family:var(--font-number);font-size:2rem;font-weight:700;color:rgba(255,255,255,.92);line-height:1;letter-spacing:-.03em;">6.2<span style="font-size:1.1rem;color:#2157A4;font-weight:600;">/7</span></div>
+          <div style="font-size:.54rem;letter-spacing:.20em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-top:6px;">Satisfacción</div>
+        </div>
+      </div>
+
+      <!-- Separador luminoso -->
+      <div class="portada-load-3" style="width:320px;height:1px;background:linear-gradient(90deg,transparent,rgba(33,87,164,.18),rgba(255,255,255,.1),rgba(33,87,164,.18),transparent);margin-bottom:28px;"></div>
+
+      <!-- Pills CTA -->
+      <div class="portada-load-4" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+        <span style="display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,#1E5FAA 0%,#2D6BBF 100%);border-radius:9999px;padding:13px 32px;font-family:var(--font-body);font-size:.78rem;font-weight:700;color:#fff;letter-spacing:.06em;box-shadow:0 4px 28px rgba(33,87,164,.45),0 0 0 1px rgba(45,107,191,.4);cursor:default;">
+          40 años en el mercado
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.10);border-radius:9999px;padding:13px 32px;font-family:var(--font-body);font-size:.78rem;font-weight:400;color:rgba(255,255,255,.42);letter-spacing:.04em;cursor:default;">
+          Holding Financiero · 4 empresas
+        </span>
+      </div>
+
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="portada-load-4" style="position:absolute;bottom:34px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:9px;z-index:3;">
+      <div style="width:1px;height:48px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,.20));animation:cover-scroll-line 2.4s ease-in-out infinite;"></div>
+      <span style="font-size:.48rem;letter-spacing:.40em;text-transform:uppercase;color:rgba(255,255,255,.11);">Scroll</span>
+    </div>
+
+  </section>
+
+  <!-- ============================================================
+       S2: QUIÉNES SOMOS + PROPUESTA DE VALOR
+  ============================================================ -->
+  <section id="quienes" class="section" style="min-height:80vh;display:grid;grid-template-columns:1fr 1fr;">
+
+    <!-- LEFT: Quiénes somos -->
+    <div class="qs-left">
+      <span class="section-num">02 / 16</span>
+      <div class="eyebrow">Quiénes somos</div>
+      <h2 class="reveal">Más de 40 años<br>en el mercado.</h2>
+      <p class="reveal reveal-delay-1">ORSAN es el Holding ORSAN Grupo Financiero — cuatro empresas especializadas, 40 años de trayectoria y un modelo B2B de alto componente tecnológico para el sector financiero no bancario en Chile.</p>
+
+      <div class="reveal reveal-delay-2" style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-md);padding:14px 18px;">
+          <div style="font-size:.82rem;font-weight:700;color:rgba(255,255,255,.9);">ORSAN Seguros</div>
+          <div style="font-size:.75rem;color:rgba(255,255,255,.45);margin-top:2px;">Crédito y garantía</div>
+        </div>
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-md);padding:14px 18px;">
+          <div style="font-size:.82rem;font-weight:700;color:rgba(255,255,255,.9);">ORSAN Factoring</div>
+          <div style="font-size:.75rem;color:rgba(255,255,255,.45);margin-top:2px;">Capital de trabajo PyME</div>
+        </div>
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-md);padding:14px 18px;">
+          <div style="font-size:.82rem;font-weight:700;color:rgba(255,255,255,.9);">ORSAN Cheque</div>
+          <div style="font-size:.75rem;color:rgba(255,255,255,.45);margin-top:2px;">Verificación y garantización</div>
+        </div>
+        <div style="background:rgba(33,87,164,.12);border:1px solid rgba(33,87,164,.3);border-radius:var(--r-md);padding:14px 18px;">
+          <div style="font-size:.82rem;font-weight:700;color:var(--c-orange-l);">ORSAN</div>
+          <div style="font-size:.75rem;color:rgba(33,87,164,.6);margin-top:2px;">Recuperación de créditos</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Propuesta de valor -->
+    <div class="qs-right">
+      <div class="eyebrow eyebrow--dark">Nuestra propuesta de valor</div>
+      <h3 class="reveal">Tu holding financiero<br>de confianza.</h3>
+      <p class="reveal reveal-delay-1" style="font-size:.9rem;color:var(--c-muted);line-height:1.7;margin-bottom:28px;">ORSAN agrupa cuatro empresas especializadas capaces de cubrir las múltiples necesidades financieras de las empresas: seguros, factoring, cobranzas y garantía de cheques.</p>
+
+      <div class="reveal reveal-delay-2" style="display:flex;flex-direction:column;gap:16px;">
+        <div style="display:flex;gap:14px;align-items:flex-start;background:var(--c-off-white);border-radius:var(--r-md);padding:18px 20px;">
+          <div style="width:40px;height:40px;background:var(--c-blue-900);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:white;font-size:1.1rem;">🏆</div>
+          <div>
+            <div style="font-weight:700;font-size:.92rem;color:var(--c-text-dark);margin-bottom:4px;">Experiencia en los rubros más exigentes</div>
+            <div style="font-size:.82rem;color:var(--c-muted);line-height:1.5;">Banca, retail, telecomunicaciones, salud, educación y más. Cada cartera con su propio modelo operativo.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;background:var(--c-off-white);border-radius:var(--r-md);padding:18px 20px;">
+          <div style="width:40px;height:40px;background:var(--c-blue-900);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:white;font-size:1.1rem;">⚙️</div>
+          <div>
+            <div style="font-weight:700;font-size:.92rem;color:var(--c-text-dark);margin-bottom:4px;">Tecnología que opera sola</div>
+            <div style="font-size:.82rem;color:var(--c-muted);line-height:1.5;">Una vez acordado el modelo, se implementa automáticamente en cada carga de cartera mensual. Sin fricción.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;background:var(--c-off-white);border-radius:var(--r-md);padding:18px 20px;">
+          <div style="width:40px;height:40px;background:var(--c-blue-900);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:white;font-size:1.1rem;">🎖️</div>
+          <div>
+            <div style="font-weight:700;font-size:.92rem;color:var(--c-text-dark);margin-bottom:4px;">Calidad certificada internacionalmente</div>
+            <div style="font-size:.82rem;color:var(--c-muted);line-height:1.5;">ISO 9001:2015 certificado por Bureau Veritas desde 2001. Cero no conformidades en auditorías recientes.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ============================================================
+       S3: NUESTROS SERVICIOS
+  ============================================================ -->
+  <section id="servicios" class="section" style="background:var(--c-off-white);">
+    <span class="section-num section-num--dark">03 / 16</span>
+    <div class="shell">
+      <div class="section-header reveal">
+        <div class="eyebrow eyebrow--dark">Nuestros servicios</div>
+        <h2 style="color:var(--c-text-dark);">Cubrimos todo el ciclo<br>financiero de tu empresa.</h2>
+        <p>Cada equipo está optimizado para la etapa correspondiente, respetando la normativa vigente y maximizando la efectividad.</p>
+      </div>
+      <div class="grid-3 reveal reveal-delay-1">
+
+        <div class="service-card">
+          <div class="service-card__header service-card__header--blue">
+            <div class="service-card__icon">🛡️</div>
+            <div>
+              <div style="font-size:.65rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:4px;">Antes del vencimiento</div>
+              <div class="service-card__title">Preventiva</div>
+            </div>
+          </div>
+          <div class="service-card__body">
+            <ul>
+              <li>Educación temprana de pago y activación proactiva.</li>
+              <li>Recordatorios multicanal (WhatsApp, SMS, email).</li>
+              <li>Estrategias para clientes nuevos y de alto impacto.</li>
+              <li>Reducción de mora antes de que se origine.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card__header service-card__header--orange">
+            <div class="service-card__icon">📊</div>
+            <div>
+              <div style="font-size:.65rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:4px;">Gestión extrajudicial activa</div>
+              <div class="service-card__title">Prejudicial</div>
+            </div>
+          </div>
+          <div class="service-card__body">
+            <ul>
+              <li>Discado predictivo, progresivo y manual integrado al CRM.</li>
+              <li>Análisis y segmentación con DATAWAREHOUSE propio.</li>
+              <li>Generación y efectividad de compromisos de pago.</li>
+              <li>Reportería en tiempo real: Power BI, QlikView, Excel.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card__header service-card__header--navy">
+            <div class="service-card__icon">⚖️</div>
+            <div>
+              <div style="font-size:.65rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:4px;">Recupero de cartera crítica</div>
+              <div class="service-card__title">Judicial</div>
+            </div>
+          </div>
+          <div class="service-card__body">
+            <ul>
+              <li>Gestión legal con equipos especializados por rubro.</li>
+              <li>Cumplimiento total de la normativa legal vigente.</li>
+              <li>Coordinación con redes de abogados a nivel nacional.</li>
+              <li>Transparencia y seguimiento en cada etapa del proceso.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       S4: CENTRO DE OPERACIONES
+  ============================================================ -->
+  <section id="operaciones" class="section" style="background:linear-gradient(135deg,var(--c-blue-900) 0%,#04224A 100%);">
+    <span class="section-num">04 / 16</span>
+    <div class="shell">
+      <div class="section-header reveal">
+        <div class="eyebrow">Centro de operaciones</div>
+        <h2 style="color:#fff;">El equipo detrás de cada cartera.</h2>
+        <p style="color:rgba(255,255,255,.55);">Más de +150 especialistas operando con tecnología propia, desde cualquier lugar, con los más altos estándares de desempeño y calidad.</p>
+      </div>
+
+      <div class="grid-4 reveal reveal-delay-1" style="margin-bottom:40px;">
+        <div class="kpi kpi--orange" style="text-align:center;">
+          <div class="kpi__number">+150</div>
+          <div class="kpi__label">Especialistas en servicios financieros</div>
+        </div>
+        <div class="kpi" style="text-align:center;">
+          <div class="kpi__number">+40</div>
+          <div class="kpi__label">Años de trayectoria en el mercado</div>
+        </div>
+        <div class="kpi kpi--blue" style="text-align:center;">
+          <div class="kpi__number">HO</div>
+          <div class="kpi__label">Modalidad Home Office consolidada</div>
+        </div>
+        <div class="kpi kpi--orange" style="text-align:center;">
+          <div class="kpi__number">100%</div>
+          <div class="kpi__label">Online · CRM accesible desde cualquier lugar</div>
+        </div>
+      </div>
+
+      <div class="grid-4 reveal reveal-delay-2">
+        <div class="cert-card">
+          <div class="cert-card__icon">🎓</div>
+          <div>
+            <div class="cert-card__title">Centro propio de capacitación</div>
+            <div class="cert-card__text">Formamos a nuestros ejecutivos en un centro interno, con protocolos actualizados según normativa vigente.</div>
+          </div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-card__icon">✅</div>
+          <div>
+            <div class="cert-card__title">Equipo certificado y supervisado</div>
+            <div class="cert-card__text">Cada gestión es monitoreada en tiempo real con KPIs operativos y seguimiento individual.</div>
+          </div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-card__icon">🌐</div>
+          <div>
+            <div class="cert-card__title">Modalidad Home Office</div>
+            <div class="cert-card__text">Operación 100% remota con CRM en la nube y supervisión continua del trabajo realizado.</div>
+          </div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-card__icon">📍</div>
+          <div>
+            <div class="cert-card__title">Cobertura Chile y Perú</div>
+            <div class="cert-card__text">Presencia regional con equipos locales especializados en la normativa de cada país.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       S5: MAGNITUD DE LA OPERACIÓN
+  ============================================================ -->
+  <section id="magnitud" class="section" style="background:linear-gradient(135deg,var(--c-blue-900) 0%,#04224A 100%);position:relative;overflow:hidden;">
+    <span class="section-num">05 / 16</span>
+    <div class="shell">
+      <div class="section-header reveal">
+        <div class="eyebrow">Magnitud de la operación</div>
+        <h2 style="color:#fff;">Números que respaldan cada cartera.</h2>
+        <p style="color:rgba(255,255,255,.55);">Gestión multicanal de alto volumen, con presencia en cada etapa del ciclo financiero.</p>
+      </div>
+
+      <!-- Stats principales -->
+      <div class="grid-4 reveal reveal-delay-1" style="margin-bottom:32px;grid-template-columns:repeat(3,1fr);">
+        <div class="kpi kpi--orange" style="text-align:center;">
+          <div class="kpi__number">+2.5 K</div>
+          <div class="kpi__label">RUTs asignados por mes</div>
+        </div>
+        <div class="kpi" style="text-align:center;">
+          <div class="kpi__number">+10 K</div>
+          <div class="kpi__label">Documentos asignados por mes</div>
+        </div>
+        <div class="kpi kpi--blue" style="text-align:center;">
+          <div class="kpi__number" style="font-size:1.8rem;">+100.000 M</div>
+          <div class="kpi__label">Recuperados / Normalizados</div>
+        </div>
+      </div>
+
+      <!-- Stat central -->
+      <div class="reveal reveal-delay-2" style="text-align:center;margin-bottom:36px;">
+        <div style="display:inline-block;background:rgba(33,87,164,.12);border:1px solid rgba(33,87,164,.30);border-radius:var(--r-lg);padding:20px 56px;">
+          <div style="font-family:var(--font-number);font-size:3rem;font-weight:800;color:var(--c-white);line-height:1;letter-spacing:-.02em;">+25 M</div>
+          <div style="font-size:.82rem;font-weight:500;color:var(--c-orange-l);margin-top:8px;letter-spacing:.04em;text-transform:uppercase;">Gestiones por mes</div>
+        </div>
+      </div>
+
+      <!-- Canales -->
+      <div class="reveal reveal-delay-3" style="display:grid;grid-template-columns:repeat(6,1fr);gap:18px;text-align:center;">
+
+        <!-- Llamados -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+          <div style="width:84px;height:84px;border-radius:50%;background:var(--c-orange);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 1 0 0-9h-1.8A7 7 0 1 0 4 15.9"/><path d="M14 16l2 2-1 2a8 8 0 0 1-5-5l2-1 2 2"/></svg>
+            <span style="font-size:7px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#fff;line-height:1.1;text-align:center;">LLAMADOS</span>
+          </div>
+          <div style="font-family:var(--font-number);font-size:1.15rem;font-weight:700;color:var(--c-white);">+14 M</div>
+        </div>
+
+        <!-- Mailing Masivo -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+          <div style="width:84px;height:84px;border-radius:50%;background:var(--c-orange);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9 6 9-6"/><rect x="3" y="6" width="18" height="13" rx="1.5"/></svg>
+            <span style="font-size:7px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#fff;line-height:1.1;text-align:center;">MAILING MASIVO</span>
+          </div>
+          <div style="font-family:var(--font-number);font-size:1.15rem;font-weight:700;color:var(--c-white);">+3 M</div>
+        </div>
+
+        <!-- Bot -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+          <div style="width:84px;height:84px;border-radius:50%;background:var(--c-orange);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="11" rx="3"/><line x1="12" y1="5" x2="12" y2="8"/><circle cx="12" cy="4" r="1.2" fill="#fff"/><circle cx="9.5" cy="13" r="1" fill="#fff"/><circle cx="14.5" cy="13" r="1" fill="#fff"/><line x1="3" y1="13" x2="5" y2="13"/><line x1="19" y1="13" x2="21" y2="13"/></svg>
+            <span style="font-size:7px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#fff;line-height:1.1;text-align:center;">BOT</span>
+          </div>
+          <div style="font-family:var(--font-number);font-size:1.15rem;font-weight:700;color:var(--c-white);">+2 M</div>
+        </div>
+
+        <!-- SMS -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+          <div style="width:84px;height:84px;border-radius:50%;background:var(--c-orange);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/><text x="12" y="13" text-anchor="middle" font-size="4.5" fill="#fff" stroke="none" font-weight="bold">SMS</text></svg>
+            <span style="font-size:7px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#fff;line-height:1.1;text-align:center;">SMS NORMAL / INTERACTIVO</span>
+          </div>
+          <div style="font-family:var(--font-number);font-size:1.15rem;font-weight:700;color:var(--c-white);">+2 M</div>
+        </div>
+
+        <!-- IVR -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+          <div style="width:84px;height:84px;border-radius:50%;background:var(--c-orange);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 14a4.5 4.5 0 1 0 0-9h-1.8A7 7 0 1 0 4 11"/><path d="M5 17.5l2.5-2.5a1 1 0 0 1 1.4 0l1 1a1 1 0 0 0 1.4 0l3-3a1 1 0 0 1 1.4 0l1 1a1 1 0 0 0 1.4 0l2-2"/><path d="M5 17.5L3 19.5a2 2 0 0 0 0 2.8h0a2 2 0 0 0 2.8 0L8 20"/></svg>
+            <span style="font-size:7px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#fff;line-height:1.1;text-align:center;">IVR</span>
+          </div>
+          <div style="font-family:var(--font-number);font-size:1.15rem;font-weight:700;color:var(--c-white);">+4 M</div>
+        </div>
+
+        <!-- WhatsApp -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+          <div style="width:84px;height:84px;border-radius:50%;background:var(--c-orange);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px;">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.7 1.5 5.3L2 22l4.8-1.4C8.4 21.5 10.2 22 12 22c5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18c-1.6 0-3.2-.4-4.5-1.2l-.3-.2-2.8.8.8-2.7-.2-.3C4.3 15 4 13.5 4 12c0-4.4 3.6-8 8-8s8 3.6 8 8-3.6 8-8 8zm4.5-5.7c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.6.1-.2.2-.6.8-.8 1-.1.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.1.2-.2.2-.4.1-.2 0-.3 0-.4 0-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2 0 1.2.8 2.3.9 2.5.1.2 1.7 2.6 4.1 3.6.6.2 1 .4 1.4.5.6.2 1.1.2 1.5.1.5-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1 0-.1-.2-.2-.4-.3z"/></svg>
+            <span style="font-size:7px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#fff;line-height:1.1;text-align:center;">WHATSAPP</span>
+          </div>
+          <div style="font-family:var(--font-number);font-size:1.15rem;font-weight:700;color:var(--c-white);">+5 mil</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       S6: CÓMO LO HACEMOS
+  ============================================================ -->
+  <section id="como" class="section" style="background:linear-gradient(160deg,#173E7A 0%,#071030 50%,#0D2D5E 100%);position:relative;overflow:hidden;">
+    <span class="section-num">06 / 16</span>
+    <div class="shell">
+      <div class="section-header reveal">
+        <div class="eyebrow">Cómo lo hacemos</div>
+        <h2>Del dato al recupero.</h2>
+        <p style="color:rgba(255,255,255,.55);">Un modelo probado de 4 hitos, automatizado en cada carga de cartera. Cada estrategia es única, cada resultado es medible.</p>
+      </div>
+
+      <div class="grid-4 reveal reveal-delay-1" style="margin-bottom:56px;">
+        <div class="process-step process-step--blue">
+          <div class="process-step__num">01</div>
+          <div class="process-step__title">Análisis y Segmentación</div>
+          <div class="process-step__text">Variables del cliente + referencias cruzadas al DATAWAREHOUSE sin costo adicional.</div>
+        </div>
+        <div class="process-step process-step--blue">
+          <div class="process-step__num">02</div>
+          <div class="process-step__title">Definición de Objetivos</div>
+          <div class="process-step__text">KPIs definidos por segmento para maximizar resultados en cada tramo de cartera.</div>
+        </div>
+        <div class="process-step process-step--blue">
+          <div class="process-step__num">03</div>
+          <div class="process-step__title">Definición de Recursos</div>
+          <div class="process-step__text">Asignación alineada con objetivos para cumplir en tiempo y forma.</div>
+        </div>
+        <div class="process-step" style="background:linear-gradient(135deg,rgba(33,87,164,.18),rgba(45,107,191,.08));">
+          <div class="process-step__num" style="color:rgba(33,87,164,.2);">04</div>
+          <div class="process-step__title">Definición Estratégica</div>
+          <div class="process-step__text">Planificación, controles y seguimiento para ejecutar las acciones definidas.</div>
+        </div>
+      </div>
+
+      <!-- Cadena de valor -->
+      <div class="reveal reveal-delay-2">
+        <div class="chain-label">Cadena de valor · <span>Los 7 pasos que ejecutamos en cada cartera</span></div>
+        <div class="chain-wrap">
+          <div class="chain-node">
+            <div class="chain-circle"><span class="p-num">01</span><span>Pene-<br>tración</span></div>
+            <div class="chain-node-label">Activación inicial de la cartera</div>
+          </div>
+          <div class="chain-line"></div>
+          <div class="chain-node">
+            <div class="chain-circle"><span class="p-num">02</span><span>Inten-<br>sidad</span></div>
+            <div class="chain-node-label">Frecuencia y profundidad omnicanal</div>
+          </div>
+          <div class="chain-line"></div>
+          <div class="chain-node">
+            <div class="chain-circle"><span class="p-num">03</span><span>Contac-<br>tabilidad</span></div>
+            <div class="chain-node-label">Al menos un canal alcanzado</div>
+          </div>
+          <div class="chain-line"></div>
+          <div class="chain-node">
+            <div class="chain-circle"><span class="p-num">04</span><span>Contacto<br>directo</span></div>
+            <div class="chain-node-label">Confirmación con el titular</div>
+          </div>
+          <div class="chain-line"></div>
+          <div class="chain-node">
+            <div class="chain-circle"><span class="p-num">05</span><span>Compro-<br>misos</span></div>
+            <div class="chain-node-label">Promesas con fecha y monto</div>
+          </div>
+          <div class="chain-line"></div>
+          <div class="chain-node">
+            <div class="chain-circle"><span class="p-num">06</span><span>Efecti-<br>vidad</span></div>
+            <div class="chain-node-label">Ratio de cumplimiento real</div>
+          </div>
+          <div class="chain-line"></div>
+          <div class="chain-node">
+            <div class="chain-circle chain-circle--final"><span class="p-num">07</span><span>Recupero<br>esperado</span></div>
+            <div class="chain-node-label">Monto recuperado / cartera</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       S6: TECNOLOGÍA
+  ============================================================ -->
+  <section id="tecnologia" class="section" style="display:grid;grid-template-columns:1fr 1fr;min-height:80vh;">
+
+    <div class="tech-left">
+      <span class="section-num">07 / 16</span>
+      <div class="eyebrow">Tecnología</div>
+      <h2 class="reveal">CRM propio,<br>omnicanal y con IA.</h2>
+      <p class="reveal reveal-delay-1">Plataforma 100% propia integrada con WhatsApp, SMS interactivo, IVR, Bot, mailing masivo y Speech Analytics. Todo opera coordinado en cada cartera.</p>
+
+      <div class="reveal reveal-delay-2">
+        <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-lg);padding:24px;">
+          <div style="font-size:.62rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:8px;">Plataforma propia</div>
+          <div style="font-family:var(--font-heading);font-size:1.5rem;font-weight:900;color:var(--c-white);margin-bottom:10px;">CRM ORSAN</div>
+          <p style="font-size:.82rem;color:rgba(255,255,255,.6);line-height:1.65;margin-bottom:18px;">Construido y mantenido in-house. Sin licencias por usuario, sin black-box: cada workflow está alineado a los procesos financieros del grupo.</p>
+          <div class="tool-badges">
+            <span class="chip" style="background:rgba(255,255,255,.07);">Discado predictivo</span>
+            <span class="chip" style="background:rgba(255,255,255,.07);">Datawarehouse</span>
+            <span class="chip" style="background:rgba(255,255,255,.07);">Reportería RT</span>
+            <span class="chip" style="background:rgba(255,255,255,.07);">API integrable</span>
+            <span class="chip" style="background:rgba(255,255,255,.07);">Power BI</span>
+            <span class="chip" style="background:rgba(255,255,255,.07);">Trazabilidad</span>
+          </div>
+        </div>
+        <div style="margin-top:16px;">
+          <div style="font-size:.62rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:10px;">Reportería integrada</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <span style="background:var(--c-orange);color:#fff;padding:5px 14px;border-radius:var(--r-pill);font-size:.75rem;font-weight:700;">Power BI</span>
+            <span style="background:var(--c-blue-700);color:#fff;padding:5px 14px;border-radius:var(--r-pill);font-size:.75rem;font-weight:700;">QlikView</span>
+            <span style="background:var(--c-blue-900);color:#fff;padding:5px 14px;border-radius:var(--r-pill);font-size:.75rem;font-weight:700;">Excel</span>
+            <span style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.15);padding:5px 14px;border-radius:var(--r-pill);font-size:.75rem;font-weight:600;">Web portal</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tech-right">
+      <h3 class="reveal">Canales integrados</h3>
+      <div class="tech-grid reveal reveal-delay-1">
+        <div class="tech-item">
+          <div class="tech-item__icon">💬</div>
+          <div class="tech-item__label">WhatsApp Interactivo</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-item__icon">📱</div>
+          <div class="tech-item__label">SMS Normal / Interactivo</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-item__icon">🤖</div>
+          <div class="tech-item__label">Bot de Gestión</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-item__icon">📞</div>
+          <div class="tech-item__label">Telefonía IVR</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-item__icon">✉️</div>
+          <div class="tech-item__label">Mailing Masivo</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-item__icon">🎙️</div>
+          <div class="tech-item__label">Speech Analytics</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ============================================================
+       S7: BI · EL QUIÉN — PROPENSIÓN AL PAGO
+  ============================================================ -->
+  <section id="bi-quien" class="section" style="background:linear-gradient(160deg,#173E7A 0%,#071030 50%,#0D2D5E 100%);">
+    <span class="section-num">08 / 16</span>
+    <div class="shell">
+      <div class="section-header reveal">
+        <div class="eyebrow">BI · Modelos predictivos</div>
+        <h2>El quién: propensión al pago.</h2>
+        <p style="color:rgba(255,255,255,.55);">No predecimos lo que hicimos — predecimos quién va a pagar. Modelo entrenado sin variables de gestión, baseline puro de perfil.</p>
+      </div>
+
+      <div class="grid-4 reveal reveal-delay-1" style="margin-bottom:40px;">
+        <div class="kpi kpi--orange">
+          <div class="kpi__number">0.9913</div>
+          <div class="kpi__label">AUC-ROC · Capacidad predictiva</div>
+        </div>
+        <div class="kpi kpi--blue">
+          <div class="kpi__number">7.85<span>M</span></div>
+          <div class="kpi__label">Registros de entrenamiento</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi__number">40<span>+</span></div>
+          <div class="kpi__label">Industrias clasificadas</div>
+        </div>
+        <div class="kpi kpi--orange">
+          <div class="kpi__number">7.08<span>x</span></div>
+          <div class="kpi__label">Lift Top 10% · Concentración predictiva</div>
+        </div>
+      </div>
+
+      <div class="grid-2 reveal reveal-delay-2">
+
+        <!-- Tasa de pago por industria -->
+        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:var(--r-lg);padding:28px;">
+          <div style="font-size:.62rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--c-orange-l);margin-bottom:6px;">Tasa de pago por industria</div>
+          <div style="font-family:var(--font-heading);font-size:1.05rem;font-weight:800;color:var(--c-white);margin-bottom:24px;">Heterogeneidad por sector</div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span style="font-size:.8rem;font-weight:600;color:rgba(255,255,255,.8);">Finanzas</span><span style="font-size:.8rem;font-weight:700;color:var(--c-orange-l);">15%</span></div>
+              <div style="height:8px;background:rgba(255,255,255,.08);border-radius:9999px;"><div style="width:100%;height:100%;background:linear-gradient(90deg,var(--c-orange),var(--c-orange-l));border-radius:9999px;"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span style="font-size:.8rem;font-weight:600;color:rgba(255,255,255,.8);">Transporte</span><span style="font-size:.8rem;font-weight:700;color:var(--c-orange-l);">10%</span></div>
+              <div style="height:8px;background:rgba(255,255,255,.08);border-radius:9999px;"><div style="width:66%;height:100%;background:linear-gradient(90deg,var(--c-blue-700),var(--c-blue-500));border-radius:9999px;"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span style="font-size:.8rem;font-weight:600;color:rgba(255,255,255,.8);">Educación</span><span style="font-size:.8rem;font-weight:700;color:var(--c-orange-l);">8%</span></div>
+              <div style="height:8px;background:rgba(255,255,255,.08);border-radius:9999px;"><div style="width:53%;height:100%;background:linear-gradient(90deg,var(--c-blue-700),var(--c-blue-500));border-radius:9999px;"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span style="font-size:.8rem;font-weight:600;color:rgba(255,255,255,.8);">Salud</span><span style="font-size:.8rem;font-weight:700;color:var(--c-orange-l);">6%</span></div>
+              <div style="height:8px;background:rgba(255,255,255,.08);border-radius:9999px;"><div style="width:40%;height:100%;background:linear-gradient(90deg,var(--c-blue-700),var(--c-blue-500));border-radius:9999px;"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span style="font-size:.8rem;font-weight:600;color:rgba(255,255,255,.8);">Retail</span><span style="font-size:.8rem;font-weight:700;color:var(--c-orange-l);">5%</span></div>
+              <div style="height:8px;background:rgba(255,255,255,.08);border-radius:9999px;"><div style="width:33%;height:100%;background:linear-gradient(90deg,var(--c-blue-700),var(--c-blue-500));border-radius:9999px;"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span style="font-size:.8rem;font-weight:600;color:rgba(255,255,255,.8);">Telecom</span><span style="font-size:.8rem;font-weight:700;color:var(--c-orange-l);">3%</span></div>
+              <div style="height:8px;background:rgba(255,255,255,.08);border-radius:9999px;"><div style="width:20%;height:100%;background:linear-gradient(90deg,var(--c-blue-700),var(--c-blue-500));border-radius:9999px;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Concentración por decil -->
+        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:var(--r-lg);padding:28px;">
+          <div style="font-size:.62rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--c-orange-l);margin-bottom:6px;">Concentración por decil</div>
+          <div style="font-family:var(--font-heading);font-size:1.05rem;font-weight:800;color:var(--c-white);margin-bottom:24px;">Top 10% concentra 82.6% de los pagos</div>
+          <div style="display:flex;align-items:flex-end;gap:6px;height:120px;padding-bottom:22px;position:relative;">
+            <!-- label baseline -->
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;"><div style="width:100%;background:var(--c-blue-900);border-radius:4px 4px 0 0;height:7px;"></div><span style="font-size:.6rem;color:rgba(255,255,255,.35);">D1</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;"><div style="width:100%;background:var(--c-blue-900);border-radius:4px 4px 0 0;height:9px;"></div><span style="font-size:.6rem;color:rgba(255,255,255,.35);">D2</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;"><div style="width:100%;background:var(--c-blue-900);border-radius:4px 4px 0 0;height:12px;"></div><span style="font-size:.6rem;color:rgba(255,255,255,.35);">D3</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;"><div style="width:100%;background:var(--c-blue-900);border-radius:4px 4px 0 0;height:14px;"></div><span style="font-size:.6rem;color:rgba(255,255,255,.35);">D4</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;"><div style="width:100%;background:var(--c-blue-700);border-radius:4px 4px 0 0;height:22px;"></div><span style="font-size:.6rem;color:rgba(255,255,255,.35);">D5</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;"><div style="width:100%;background:var(--c-blue-700);border-radius:4px 4px 0 0;height:30px;"></div><span style="font-size:.6rem;color:rgba(255,255,255,.35);">D6</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;"><div style="width:100%;background:var(--c-blue-500);border-radius:4px 4px 0 0;height:46px;"></div><span style="font-size:.6rem;color:rgba(255,255,255,.35);">D7</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;"><div style="width:100%;background:var(--c-blue-500);border-radius:4px 4px 0 0;height:62px;"></div><span style="font-size:.6rem;color:rgba(255,255,255,.35);">D8</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;"><div style="width:100%;background:var(--c-orange);border-radius:4px 4px 0 0;height:76px;"></div><span style="font-size:.6rem;color:rgba(255,255,255,.35);">D9</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;"><div style="width:100%;background:var(--c-orange);border-radius:4px 4px 0 0;height:98px;"></div><span style="font-size:.6rem;color:rgba(255,255,255,.35);">D10</span></div>
+          </div>
+          <div style="margin-top:20px;background:rgba(33,87,164,.1);border:1px solid rgba(33,87,164,.2);border-radius:var(--r-md);padding:14px 16px;">
+            <div style="font-size:.78rem;font-weight:700;color:var(--c-orange-l);margin-bottom:4px;">Hallazgo clave</div>
+            <div style="font-size:.78rem;color:rgba(255,255,255,.65);line-height:1.5;">Priorizar deciles altos = recuperación máxima con esfuerzo mínimo. Reasignación basada en propensión real.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       S8: BI · EL CUÁNDO — VENTANAS DE CONTACTABILIDAD
+  ============================================================ -->
+  <section id="bi-cuando" class="section" style="background:linear-gradient(135deg,#173E7A 0%,#0D2D5E 100%);">
+    <span class="section-num">09 / 16</span>
+    <div class="shell">
+      <div style="display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start;margin-bottom:40px;">
+        <div class="reveal">
+          <div class="eyebrow">BI · Modelos predictivos</div>
+          <h2 style="color:#fff;">El cuándo: ventanas<br>de contactabilidad.</h2>
+          <p style="color:rgba(255,255,255,.65);">Cada perfil tiene su ventana óptima de contacto. El modelo segmenta por demografía y antigüedad para dictar el momento exacto.</p>
+        </div>
+        <div class="kpi kpi--orange reveal" style="min-width:200px;text-align:center;">
+          <div style="font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:4px;">Cramér's V · Género</div>
+          <div class="kpi__number" style="font-size:3rem;">0.289</div>
+          <div class="kpi__label">Gap ventana 31-60d · +5.50pp</div>
+          <div style="font-size:.72rem;color:rgba(180,210,255,.8);margin-top:4px;">Hombres > mujeres en su punto máximo natural</div>
+        </div>
+      </div>
+
+      <!-- Gráfico de líneas SVG -->
+      <div class="reveal reveal-delay-1" style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:var(--r-lg);padding:28px;margin-bottom:32px;">
+        <div style="font-size:.62rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#7DB8F5;margin-bottom:4px;">Propensión por antigüedad de mora y género</div>
+        <div style="font-family:var(--font-heading);font-size:1rem;font-weight:800;color:#fff;margin-bottom:20px;">Hombres alcanzan punto máximo antes · mujeres más resilientes</div>
+        <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+          <defs>
+            <linearGradient id="gradH" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#1E6BB8" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#1E6BB8" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="gradM" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <line x1="60" y1="20" x2="660" y2="20" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+          <line x1="60" y1="70" x2="660" y2="70" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+          <line x1="60" y1="120" x2="660" y2="120" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+          <line x1="60" y1="170" x2="660" y2="170" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+          <text x="50" y="24" text-anchor="end" fill="rgba(255,255,255,.7)" font-size="10">59%</text>
+          <text x="50" y="74" text-anchor="end" fill="rgba(255,255,255,.7)" font-size="10">40%</text>
+          <text x="50" y="124" text-anchor="end" fill="rgba(255,255,255,.7)" font-size="10">20%</text>
+          <text x="50" y="174" text-anchor="end" fill="rgba(255,255,255,.7)" font-size="10">0%</text>
+          <text x="80" y="190" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="9">0-30d</text>
+          <text x="180" y="190" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="9">31-60d</text>
+          <text x="280" y="190" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="9">61-90d</text>
+          <text x="380" y="190" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="9">91-180d</text>
+          <text x="480" y="190" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="9">181-360d</text>
+          <text x="580" y="190" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="9">361-720d</text>
+          <text x="650" y="190" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="9">721+d</text>
+          <polyline points="80,130 180,30 280,80 380,90 480,115 580,145 650,162" fill="none" stroke="#3B82F6" stroke-width="2.5" stroke-linejoin="round"/>
+          <polygon points="80,130 180,30 280,80 380,90 480,115 580,145 650,162 650,170 80,170" fill="url(#gradH)"/>
+          <polyline points="80,140 180,55 280,82 380,85 480,105 580,130 650,168" fill="none" stroke="#F59E0B" stroke-width="2.5" stroke-linejoin="round"/>
+          <polygon points="80,140 180,55 280,82 380,85 480,105 580,130 650,168 650,170 80,170" fill="url(#gradM)"/>
+          <circle cx="80" cy="130" r="4" fill="#3B82F6"/>
+          <circle cx="180" cy="30" r="4" fill="#3B82F6"/>
+          <circle cx="280" cy="80" r="4" fill="#3B82F6"/>
+          <circle cx="380" cy="90" r="4" fill="#3B82F6"/>
+          <circle cx="480" cy="115" r="4" fill="#3B82F6"/>
+          <circle cx="580" cy="145" r="4" fill="#3B82F6"/>
+          <circle cx="80" cy="140" r="4" fill="#F59E0B"/>
+          <circle cx="180" cy="55" r="4" fill="#F59E0B"/>
+          <circle cx="280" cy="82" r="4" fill="#F59E0B"/>
+          <circle cx="380" cy="85" r="4" fill="#F59E0B"/>
+          <circle cx="480" cy="105" r="4" fill="#F59E0B"/>
+          <circle cx="580" cy="130" r="4" fill="#F59E0B"/>
+          <rect x="540" y="5" width="12" height="4" rx="2" fill="#3B82F6"/>
+          <text x="556" y="11" fill="rgba(255,255,255,.9)" font-size="10">Hombres</text>
+          <rect x="610" y="5" width="12" height="4" rx="2" fill="#F59E0B"/>
+          <text x="626" y="11" fill="rgba(255,255,255,.9)" font-size="10">Mujeres</text>
+        </svg>
+      </div>
+
+      <div class="grid-3 reveal reveal-delay-2">
+        <div class="process-step process-step--blue">
+          <div style="font-size:1.6rem;margin-bottom:10px;">⭐</div>
+          <div class="process-step__title">Ventana dorada (31-60d)</div>
+          <div class="process-step__text">Hombres 54.3% vs mujeres 48.8%. Gap +5.50pp en su punto de mayor propensión natural.</div>
+        </div>
+        <div class="process-step process-step--blue">
+          <div style="font-size:1.6rem;margin-bottom:10px;">⚡</div>
+          <div class="process-step__title">Decay acelerado hombres</div>
+          <div class="process-step__text">Caen 11.6% más rápido post-30d. La urgencia importa más para este segmento.</div>
+        </div>
+        <div class="process-step">
+          <div style="font-size:1.6rem;margin-bottom:10px;">🔀</div>
+          <div class="process-step__title">Crossover post-91d</div>
+          <div class="process-step__text">Mujeres superan hombres en propensión post-90d. Estrategia diferenciada de largo plazo.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       S9: SISTEMA DE GESTIÓN DE CALIDAD
+  ============================================================ -->
+  <section id="calidad" class="section" style="background:var(--c-off-white);">
+    <span class="section-num section-num--dark">10 / 16</span>
+    <div class="shell">
+      <div class="section-header reveal">
+        <div class="eyebrow eyebrow--dark">Sistema de gestión de calidad</div>
+        <h2 style="color:var(--c-text-dark);">Calidad medida y certificada.</h2>
+        <p>Procesos auditados, llamadas grabadas y analizadas con IA, y métricas reportadas con trazabilidad total al mandante.</p>
+      </div>
+
+      <div class="grid-4 reveal reveal-delay-1" style="margin-bottom:40px;">
+        <div class="stat-box" style="text-align:center;">
+          <div style="font-size:2rem;margin-bottom:8px;">🛡️</div>
+          <div class="stat-box__number" style="font-size:1.1rem;">ISO 9001:2015</div>
+          <div class="stat-box__label">Certificado por Bureau Veritas desde el año 2001.</div>
+        </div>
+        <div class="stat-box" style="text-align:center;">
+          <div style="font-size:2rem;margin-bottom:8px;">✅</div>
+          <div class="stat-box__number" style="font-size:1.8rem;">0</div>
+          <div class="stat-box__label">No conformidades en las últimas certificaciones anuales consecutivas.</div>
+        </div>
+        <div class="stat-box" style="text-align:center;">
+          <div style="font-size:2rem;margin-bottom:8px;">🤖</div>
+          <div class="stat-box__number" style="font-size:1.1rem;">Auditoría con IA</div>
+          <div class="stat-box__label">Revisión de ejecutivos manual y con inteligencia artificial.</div>
+        </div>
+        <div class="stat-box" style="text-align:center;">
+          <div style="font-size:2rem;margin-bottom:8px;">⚖️</div>
+          <div class="stat-box__number" style="font-size:1.1rem;">Cumplimiento legal</div>
+          <div class="stat-box__label">Capacidad de auditoría total sobre normativa financiera vigente.</div>
+        </div>
+      </div>
+
+      <div class="reveal reveal-delay-2" style="background:linear-gradient(135deg,var(--c-blue-900),#04224A);border-radius:var(--r-xl);padding:36px;">
+        <div style="font-size:.62rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--c-orange-l);margin-bottom:6px;">Procesos de control</div>
+        <div style="font-family:var(--font-heading);font-size:1.1rem;font-weight:800;color:var(--c-white);margin-bottom:28px;">4 capas de aseguramiento de calidad.</div>
+        <div class="grid-4">
+          <div class="process-step" style="background:rgba(255,255,255,.07);">
+            <div class="process-step__num" style="color:rgba(33,87,164,.2);">01</div>
+            <div class="process-step__title">Auditorías internas</div>
+            <div class="process-step__text">Mensuales sobre las gestiones del grupo, con resultados reportados a cada cliente.</div>
+          </div>
+          <div class="process-step" style="background:rgba(255,255,255,.07);">
+            <div class="process-step__num" style="color:rgba(33,87,164,.2);">02</div>
+            <div class="process-step__title">Speech Analytics IA</div>
+            <div class="process-step__text">El 100% de las llamadas son grabadas y analizadas con IA para detectar desviaciones.</div>
+          </div>
+          <div class="process-step" style="background:rgba(255,255,255,.07);">
+            <div class="process-step__num" style="color:rgba(33,87,164,.2);">03</div>
+            <div class="process-step__title">KPIs por ejecutivo</div>
+            <div class="process-step__text">Cada gestor tiene métricas individuales: contactabilidad, efectividad, calidad de gestión.</div>
+          </div>
+          <div class="process-step" style="background:rgba(255,255,255,.07);">
+            <div class="process-step__num" style="color:rgba(33,87,164,.2);">04</div>
+            <div class="process-step__title">Dashboards live</div>
+            <div class="process-step__text">Reportería en tiempo real para mandante y supervisores con drill-down hasta el caso.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       S10: VOZ DEL CLIENTE
+  ============================================================ -->
+  <section id="voz" class="section" style="background:linear-gradient(135deg,#173E7A 0%,#0D2D5E 100%);">
+    <span class="section-num">11 / 16</span>
+    <div class="shell">
+      <div class="section-header reveal">
+        <div class="eyebrow">Voz del cliente</div>
+        <h2>Por qué nos eligen.</h2>
+        <p style="color:rgba(255,255,255,.55);">Lo que nuestros clientes valoran, en sus propias palabras. Más que proveedores, somos el aliado que entiende su realidad.</p>
+      </div>
+      <div class="grid-2 reveal reveal-delay-1">
+        <div class="cert-card" style="flex-direction:column;gap:14px;padding:28px;">
+          <div style="font-size:2rem;">📋</div>
+          <div>
+            <div class="cert-card__title" style="font-size:1rem;margin-bottom:8px;">Alta experiencia en servicios financieros</div>
+            <div style="font-size:.88rem;font-style:italic;color:rgba(255,255,255,.55);line-height:1.7;">"Entienden el rubro sin que tengas que explicar desde cero."</div>
+          </div>
+        </div>
+        <div class="cert-card" style="flex-direction:column;gap:14px;padding:28px;">
+          <div style="font-size:2rem;">📡</div>
+          <div>
+            <div class="cert-card__title" style="font-size:1rem;margin-bottom:8px;">Tecnología omnicanal de punta</div>
+            <div style="font-size:.88rem;font-style:italic;color:rgba(255,255,255,.55);line-height:1.7;">"La omnicanalidad con IA hace una diferencia real en contactabilidad."</div>
+          </div>
+        </div>
+        <div class="cert-card" style="flex-direction:column;gap:14px;padding:28px;">
+          <div style="font-size:2rem;">🤝</div>
+          <div>
+            <div class="cert-card__title" style="font-size:1rem;margin-bottom:8px;">Equipo cercano y resolutivo</div>
+            <div style="font-size:.88rem;font-style:italic;color:rgba(255,255,255,.55);line-height:1.7;">"Responden rápido y se involucran como si fueran parte de nuestro equipo."</div>
+          </div>
+        </div>
+        <div class="cert-card" style="flex-direction:column;gap:14px;padding:28px;">
+          <div style="font-size:2rem;">📊</div>
+          <div>
+            <div class="cert-card__title" style="font-size:1rem;margin-bottom:8px;">Transparencia y reportería</div>
+            <div style="font-size:.88rem;font-style:italic;color:rgba(255,255,255,.55);line-height:1.7;">"Tenemos visibilidad total de la gestión, en tiempo real."</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       S11: FIDELIDAD
+  ============================================================ -->
+  <section id="fidelidad" class="section" style="background:var(--c-off-white);">
+    <span class="section-num section-num--dark">12 / 16</span>
+    <div class="shell">
+      <div class="section-header reveal">
+        <div class="eyebrow eyebrow--dark">Fidelidad</div>
+        <h2 style="color:var(--c-text-dark);">Clientes que nos siguen eligiendo.</h2>
+        <p>Las razones por las que nuestros clientes mantienen la relación año tras año.</p>
+      </div>
+      <div class="grid-3 reveal reveal-delay-1">
+        <div class="why-card why-card--light">
+          <div class="why-card__emoji">💛</div>
+          <div class="why-card__title">Trato humano y cercano</div>
+          <div class="why-card__text">Detrás de cada proceso hay un equipo que conoce al cliente y se alinea con sus objetivos.</div>
+        </div>
+        <div class="why-card why-card--light">
+          <div class="why-card__emoji">📈</div>
+          <div class="why-card__title">Resultados sostenidos</div>
+          <div class="why-card__text">Cumplimos los KPIs comprometidos y mantenemos la performance en el tiempo.</div>
+        </div>
+        <div class="why-card why-card--light">
+          <div class="why-card__emoji">🔧</div>
+          <div class="why-card__title">Adaptación a tu modelo</div>
+          <div class="why-card__text">No exigimos que cambien sus procesos; nos adaptamos a su forma de operar.</div>
+        </div>
+        <div class="why-card why-card--light">
+          <div class="why-card__emoji">🔍</div>
+          <div class="why-card__title">Transparencia total</div>
+          <div class="why-card__text">Reportería abierta, dashboards live, acceso a la grabación de cada gestión.</div>
+        </div>
+        <div class="why-card why-card--light">
+          <div class="why-card__emoji">⚡</div>
+          <div class="why-card__title">Respuesta rápida ante imprevistos</div>
+          <div class="why-card__text">Equipos dedicados que responden en horas, no en semanas.</div>
+        </div>
+        <div class="why-card why-card--light">
+          <div class="why-card__emoji">🚀</div>
+          <div class="why-card__title">Innovación continua</div>
+          <div class="why-card__text">Reinvertimos en tecnología propia: el CRM y el speech analytics evolucionan cada trimestre.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       S12: INDUSTRIAS + RSE
+  ============================================================ -->
+  <section id="industrias" class="section" style="background:var(--c-off-white);">
+    <span class="section-num section-num--dark">13 / 16</span>
+    <div class="shell">
+      <div style="display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start;margin-bottom:40px;">
+        <div class="reveal">
+          <div class="eyebrow eyebrow--dark">Industrias que servimos</div>
+          <h2 style="color:var(--c-text-dark);">Portafolio de clientes.</h2>
+          <p>Experiencia probada en los rubros más exigentes del mercado. Cada industria con su propio modelo operativo y equipo especializado.</p>
+        </div>
+        <div class="stat-box reveal" style="min-width:220px;">
+          <div style="font-size:1.4rem;margin-bottom:8px;">🌐</div>
+          <div style="font-weight:800;color:var(--c-text-dark);font-size:.95rem;margin-bottom:4px;">Cobertura regional</div>
+          <div style="font-family:var(--font-heading);font-size:1.2rem;font-weight:900;color:var(--c-blue-700);">Chile · Perú</div>
+          <div style="font-size:.78rem;color:var(--c-muted);margin-top:6px;line-height:1.5;">Equipos remotos y presenciales operando en ambos países desde 2018.</div>
+        </div>
+      </div>
+
+      <div class="grid-4 reveal reveal-delay-1" style="margin-bottom:48px;">
+        <div class="rubro-item"><div class="rubro-item__icon">📶</div><div class="rubro-item__label">Telecomunicaciones</div></div>
+        <div class="rubro-item"><div class="rubro-item__icon">🏦</div><div class="rubro-item__label">Banca</div></div>
+        <div class="rubro-item"><div class="rubro-item__icon">🛒</div><div class="rubro-item__label">Retail</div></div>
+        <div class="rubro-item"><div class="rubro-item__icon">🏥</div><div class="rubro-item__label">Salud</div></div>
+        <div class="rubro-item"><div class="rubro-item__icon">🎓</div><div class="rubro-item__label">Educación</div></div>
+        <div class="rubro-item"><div class="rubro-item__icon">⚡</div><div class="rubro-item__label">Servicios básicos</div></div>
+        <div class="rubro-item"><div class="rubro-item__icon">🏛️</div><div class="rubro-item__label">Cementerios</div></div>
+        <div class="rubro-item"><div class="rubro-item__icon">🛡️</div><div class="rubro-item__label">Seguros</div></div>
+      </div>
+
+      <div class="reveal reveal-delay-2" style="background:linear-gradient(135deg,var(--c-blue-900),#04224A);border-radius:var(--r-xl);padding:36px;">
+        <div style="font-size:.62rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--c-orange-l);margin-bottom:6px;">Responsabilidad Social Empresarial</div>
+        <div style="font-family:var(--font-heading);font-size:1.1rem;font-weight:800;color:var(--c-white);margin-bottom:24px;">Comprometidos más allá del negocio.</div>
+        <div class="grid-3">
+          <div class="cert-card">
+            <div class="cert-card__icon">🎓</div>
+            <div>
+              <div class="cert-card__title">Programa Ágora</div>
+              <div class="cert-card__text">Capacitación e inserción laboral para personas en situación de vulnerabilidad.</div>
+            </div>
+          </div>
+          <div class="cert-card">
+            <div class="cert-card__icon">💛</div>
+            <div>
+              <div class="cert-card__title">Fundación Santa Clara</div>
+              <div class="cert-card__text">Desarrollo y atención de niños y adolescentes que viven bajo la condición de VIH.</div>
+            </div>
+          </div>
+          <div class="cert-card">
+            <div class="cert-card__icon">🎨</div>
+            <div>
+              <div class="cert-card__title">Corporación Nuestro Espacio</div>
+              <div class="cert-card__text">Apoyo a niños y niñas para enfrentar desafíos sociales a través del arte y la creatividad.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       S13: VENTAJAS COMPETITIVAS
+  ============================================================ -->
+  <section id="ventajas" class="section" style="background:var(--c-white);">
+    <span class="section-num section-num--dark">14 / 16</span>
+    <div class="shell">
+      <div class="section-header reveal">
+        <div class="eyebrow eyebrow--dark">Ventajas competitivas</div>
+        <h2 style="color:var(--c-text-dark);">Por qué elegirnos.</h2>
+        <p>Lo que nos diferencia, sintetizado en seis razones concretas y medibles.</p>
+      </div>
+      <div class="grid-3 reveal reveal-delay-1">
+        <div class="why-card why-card--light">
+          <div class="why-card__emoji">🏆</div>
+          <div class="why-card__title">Alta experiencia en servicios financieros</div>
+          <div class="why-card__text">Más de 40 años gestionando carteras de los principales rubros del país: banca, retail, telecomunicaciones, salud y más.</div>
+        </div>
+        <div class="why-card why-card--light">
+          <div class="why-card__emoji">📡</div>
+          <div class="why-card__title">Tecnología omnicanal de punta</div>
+          <div class="why-card__text">CRM propio integrado con WhatsApp, SMS, IVR, Bot, mailing y Speech Analytics. Todo en una sola plataforma.</div>
+        </div>
+        <div class="why-card why-card--dark">
+          <div style="font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:6px;">Nota 6,2 / 7,0</div>
+          <div class="why-card__title">Calificados por nuestros propios clientes</div>
+          <div class="why-card__text">96% de participación en encuesta anual. El 62% de los clientes nos califica sobre 5,9.</div>
+        </div>
+        <div class="why-card why-card--orange">
+          <div style="font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:6px;">NPS 2025</div>
+          <div class="why-card__title">64% son Promotores activos</div>
+          <div class="why-card__text">Más de la mitad de nuestros clientes nos recomiendan activamente. 10 llevan siendo Promotores desde 2023.</div>
+        </div>
+        <div class="why-card why-card--light">
+          <div class="why-card__emoji">🎖️</div>
+          <div class="why-card__title">ISO 9001:2015 · Cero no conformidades</div>
+          <div class="why-card__text">Certificados por Bureau Veritas desde el 2001. Comprometemos lo que hacemos y hacemos lo que comprometemos.</div>
+        </div>
+        <div class="why-card why-card--light">
+          <div class="why-card__emoji">🤝</div>
+          <div class="why-card__title">Socios estratégicos, no proveedores</div>
+          <div class="why-card__text">Nos adaptamos a tu modelo de negocio, alineamos objetivos y medimos resultados contigo en tiempo real.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       S14: RESULTADOS QUE RESPALDAN
+  ============================================================ -->
+  <section id="resultados" class="section" style="background:linear-gradient(160deg,#173E7A 0%,#071030 50%,#0D2D5E 100%);">
+    <span class="section-num">15 / 16</span>
+    <div class="shell">
+      <div class="section-header reveal">
+        <div class="eyebrow">Resultados que respaldan</div>
+        <h2>Lo que dicen los números.</h2>
+        <p style="color:rgba(255,255,255,.55);">Encuesta de satisfacción 2025 y métricas de gestión consolidadas.</p>
+      </div>
+
+      <div class="grid-4 reveal reveal-delay-1" style="margin-bottom:48px;">
+        <div class="kpi kpi--orange" style="text-align:center;">
+          <div class="kpi__number">6,2<span>/7,0</span></div>
+          <div class="kpi__label" style="font-weight:600;">Nota promedio</div>
+          <div class="kpi__label">Muy buen servicio</div>
+        </div>
+        <div class="kpi" style="text-align:center;">
+          <div class="kpi__number">96<span>%</span></div>
+          <div class="kpi__label" style="font-weight:600;">Tasa de respuesta</div>
+          <div class="kpi__label">24 de 25 clientes</div>
+        </div>
+        <div class="kpi kpi--orange" style="text-align:center;">
+          <div class="kpi__number">64<span>%</span></div>
+          <div class="kpi__label" style="font-weight:600;">Promotores activos</div>
+          <div class="kpi__label">NPS positivo</div>
+        </div>
+        <div class="kpi kpi--green" style="text-align:center;">
+          <div class="kpi__number">89<span>%</span></div>
+          <div class="kpi__label" style="font-weight:600;">Cumplimiento SGC</div>
+          <div class="kpi__label">Sobre meta del 85%</div>
+        </div>
+      </div>
+
+      <div class="reveal reveal-delay-2" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:var(--r-xl);padding:36px;">
+        <div style="font-size:.62rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--c-orange-l);margin-bottom:6px;">Fortalezas reconocidas</div>
+        <div style="font-family:var(--font-heading);font-size:1.05rem;font-weight:800;color:var(--c-white);margin-bottom:28px;">Las dimensiones mejor evaluadas.</div>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div class="progress-row">
+            <div class="progress-row__header">
+              <span class="progress-row__label" style="color:rgba(255,255,255,.8);">Trato y cordialidad del equipo</span>
+              <span class="progress-row__value" style="color:var(--c-orange-l);">96%</span>
+            </div>
+            <div class="progress-row__track"><div class="progress-row__fill progress-row__fill--orange" data-target-width="96"></div></div>
+          </div>
+          <div class="progress-row">
+            <div class="progress-row__header">
+              <span class="progress-row__label" style="color:rgba(255,255,255,.8);">Vías de comunicación</span>
+              <span class="progress-row__value" style="color:var(--c-orange-l);">94%</span>
+            </div>
+            <div class="progress-row__track"><div class="progress-row__fill progress-row__fill--orange" data-target-width="94"></div></div>
+          </div>
+          <div class="progress-row">
+            <div class="progress-row__header">
+              <span class="progress-row__label" style="color:rgba(255,255,255,.8);">Resolución oportuna de reclamos</span>
+              <span class="progress-row__value" style="color:var(--c-orange-l);">93%</span>
+            </div>
+            <div class="progress-row__track"><div class="progress-row__fill progress-row__fill--orange" data-target-width="93"></div></div>
+          </div>
+          <div class="progress-row">
+            <div class="progress-row__header">
+              <span class="progress-row__label" style="color:rgba(255,255,255,.8);">Resultados comprometidos</span>
+              <span class="progress-row__value" style="color:var(--c-orange-l);">84%</span>
+            </div>
+            <div class="progress-row__track"><div class="progress-row__fill progress-row__fill--orange" data-target-width="84"></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       S15: CIERRE / CONTACTO
+  ============================================================ -->
+  <section id="cierre" class="section">
+    <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.04) 1px,transparent 1px);background-size:28px 28px;pointer-events:none;z-index:0;"></div>
+    <div class="shell">
+      <div class="cierre-inner">
+        <div class="cierre-logo reveal">
+          <div class="cierre-logo__mark">
+            <svg viewBox="0 0 792 612" xmlns="http://www.w3.org/2000/svg" style="height:88px;width:auto;">
+              <path fill="rgba(255,255,255,0.85)" d="M151.09,210.39l-12.86,12.89.11.02-52.66,52.67-.04-.04-10.83,10.83.04.04-.04.04,10.84,10.84.04-.04,20.25,20.25,10.84-10.84-20.25-20.25,57.47-57.48c32.22,17.28,44.33,57.4,27.05,89.62-12.85,23.96-39.05,37.63-66.05,34.46l-12.47,12.47c43.69,11,88.03-15.5,99.02-59.19,10.14-40.26-11.59-81.72-50.46-96.3"/>
+              <path fill="rgba(255,255,255,0.85)" d="M170.29,286.76l-10.84-10.84-.04.04-20.36-20.36-10.84,10.85,20.36,20.36-58.52,58.52c-31.87-17.95-43.15-58.33-25.21-90.2,11.74-20.84,33.79-33.73,57.71-33.73,2.05,0,4.08.11,6.07.29l13.95-13.95c-43.69-11-88.02,15.51-99.02,59.2-10.12,40.21,11.54,81.62,50.34,96.24l11.57-11.57h-.02l53.96-53.96.04.04,10.84-10.84-.04-.04.06-.04Z"/>
+              <path fill="rgba(255,255,255,0.85)" d="M284.74,230.37c30.19-.06,54.71,24.36,54.77,54.55.06,30.19-24.36,54.71-54.55,54.77-30.19.06-54.71-24.36-54.77-54.55,0-.05,0-.1,0-.15-.49-29.67,23.16-54.13,52.83-54.62.57,0,1.15,0,1.72,0M284.68,314.76c17.12.01,28.39-12.14,28.41-29.71.01-17.72-11.24-29.74-28.36-29.76-16.97-.01-28.24,11.99-28.26,29.71-.01,17.57,11.24,29.74,28.21,29.76"/>
+              <path fill="rgba(255,255,255,0.85)" d="M381.34,253.97l-.06,81.41-25.19-.02.08-104.95,39.13.03c26.39.02,42.27,14.41,42.25,36.01-.01,14.09-6.76,24.58-18.91,30.27l23.21,38.7-25.23-.02-29.45-52.43h8.47c8.39-.01,15.2-6.81,15.23-15.2h0c0-8.34-5.95-13.79-14.29-13.79l-15.24-.02Z"/>
+              <path fill="rgba(255,255,255,0.85)" d="M509.05,265.97c-2.19-8.19-9.68-13.83-18.16-13.68-7.51,0-11.87,3.74-11.87,7.95,0,6.91,10.51,9.47,23.27,14.14,15.61,5.72,31.98,14.59,31.96,32.61-.01,19.22-16.54,32.87-41.02,32.86-21.93-.02-37.54-12.19-44.43-31.87l24.18-6.44c2.94,9.34,11.52,15.76,21.31,15.93,9.01,0,13.22-4.19,13.22-9.3,0-8.41-12.3-10.52-27.32-16.24-12.61-4.82-27.18-11.74-27.17-30.21.01-16.37,16.54-31.22,39.37-31.21,20.12.02,36.03,12.34,40.98,28.86l-24.32,6.59Z"/>
+              <path fill="rgba(255,255,255,0.85)" d="M611.82,319.06l-41.53-.03-6.01,16.49-27.14-.02,42.06-104.92,23.84.02,41.9,104.98-27.14-.02-5.98-16.5ZM603.75,297.02l-7.48-20.4c-2.24-6-4.93-15.44-5.09-15.45h-.15c-.15,0-2.86,9.44-5.11,15.44l-7.51,20.38,25.34.02Z"/>
+              <path fill="rgba(255,255,255,0.85)" d="M750.94,230.71l-.08,104.95-23.98-.02-21.41-29.25c-9.59-13.2-23.66-33.15-23.81-33.15h-.15c-.15,0,.14,16.19.12,39.13l-.02,23.24-25.19-.02.08-104.95,23.69.02,22.32,30c6.74,8.99,22.77,31.65,22.92,31.65h.15c.15,0-.14-18.59-.12-37.63l.02-23.99,25.47.02Z"/>
+              <path fill="rgba(255,255,255,0.5)" d="M659.12,406.75c-4.03,0-7.45-.95-10.28-2.85-2.83-1.9-4.83-4.66-6-8.28-.81-2.44-1.22-6.67-1.22-12.69s.41-10.24,1.22-12.69c1.18-3.62,3.18-6.38,6-8.28,2.83-1.9,6.25-2.85,10.28-2.85s7.52.95,10.35,2.85c2.83,1.9,4.83,4.66,6,8.28.81,2.44,1.22,6.67,1.22,12.69s-.41,10.24-1.22,12.69c-1.18,3.62-3.18,6.38-6,8.28-2.83,1.9-6.28,2.85-10.35,2.85ZM659.12,399.56c4.34,0,7.21-2.01,8.62-6.04.54-1.67.81-5.2.81-10.58s-.27-8.86-.81-10.58c-1.4-4.02-4.27-6.04-8.62-6.04s-7.15,2.01-8.55,6.04c-.54,1.72-.81,5.25-.81,10.58s.27,8.91.81,10.58c1.4,4.03,4.25,6.04,8.55,6.04Z"/>
+              <path fill="rgba(255,255,255,0.5)" d="M710.95,406h-6.24c-.45,0-.68-.23-.68-.68v-18.86c0-2.17-.53-3.9-1.59-5.19-1.06-1.29-2.59-1.93-4.58-1.93s-3.47.66-4.58,1.97c-1.11,1.31-1.66,3.03-1.66,5.16v18.86c0,.45-.23.68-.68.68h-6.24c-.45,0-.68-.23-.68-.68v-31.34c0-.45.23-.68.68-.68h6.24c.45,0,.68.23.68.68v2.38h.07c1.76-2.53,4.64-3.8,8.62-3.8,3.44,0,6.18,1.13,8.24,3.39,2.06,2.26,3.09,5.18,3.09,8.75v20.63c0,.45-.23.68-.68.68Z"/>
+              <path fill="rgba(255,255,255,0.5)" d="M732.87,406.75c-3.44,0-6.34-.8-8.72-2.41-2.38-1.6-4.01-3.83-4.92-6.68-.77-2.4-1.15-5.06-1.15-8.01,0-3.12.36-5.81,1.09-8.07.9-2.85,2.54-5.06,4.92-6.65,2.38-1.58,5.19-2.37,8.45-2.37s6.2.8,8.55,2.41c2.35,1.61,3.98,3.81,4.88,6.62.72,2.22,1.09,5.49,1.09,9.84,0,.45-.25.68-.75.68h-20.15c-.27,0-.41.14-.41.41,0,.81.16,1.65.48,2.51,1.13,3.3,3.57,4.95,7.33,4.95,3.21,0,5.77-1.04,7.67-3.12.36-.36.7-.41,1.02-.13l4,3.53c.32.27.34.59.07.95-3.17,3.71-7.64,5.56-13.43,5.56ZM739.38,385.99c0-1.04-.14-1.97-.41-2.78-.45-1.31-1.24-2.34-2.37-3.09-1.13-.75-2.47-1.12-4-1.12-3.35,0-5.5,1.4-6.45,4.2-.27.81-.41,1.74-.41,2.78,0,.27.14.41.41.41h12.82c.27,0,.41-.14.41-.41Z"/>
+            </svg>
+          </div>
+        </div>
+        <h2 class="reveal reveal-delay-1">ORSAN, el holding financiero<br><em style="font-style:normal;color:var(--c-orange)">que respalda tu empresa.</em></h2>
+        <p class="reveal reveal-delay-2">ISO 9001:2015 certificado por Bureau Veritas desde 2001. +40 años de trayectoria. +150 especialistas. NPS 2025: 64% promotores.</p>
+        <div class="contact-grid reveal reveal-delay-3">
+          <div class="contact-card">
+            <div class="contact-card__icon">👤</div>
+            <div class="contact-card__title">Ejecutivo</div>
+            <div class="contact-card__value">Daniel Alcalá<br><span style="font-size:.78rem;opacity:.7">Gerente Comercial</span></div>
+          </div>
+          <div class="contact-card">
+            <div class="contact-card__icon">📞</div>
+            <div class="contact-card__title">Teléfono</div>
+            <div class="contact-card__value"><a href="tel:+51952485633">+51 952 485 633</a><br><span style="font-size:.75rem;opacity:.6">Lunes a viernes</span></div>
+          </div>
+          <div class="contact-card">
+            <div class="contact-card__icon">📧</div>
+            <div class="contact-card__title">Correo</div>
+            <div class="contact-card__value"><a href="mailto:daniel.alcala@orsan.pe">daniel.alcala@orsan.pe</a><br><span style="font-size:.78rem;opacity:.6">Respuesta en 24h</span></div>
+          </div>
+          <div class="contact-card">
+            <div class="contact-card__icon">🌐</div>
+            <div class="contact-card__title">Web</div>
+            <div class="contact-card__value"><a href="https://www.orsan.pe" target="_blank" rel="noopener">www.orsan.pe</a><br><span style="font-size:.72rem;opacity:.6">Conocé más online</span></div>
+          </div>
+        </div>
+        <div class="reveal reveal-delay-4" style="margin-top:40px;font-size:.58rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.12);">ORSAN · CIERRE · CONTACTO &nbsp;·&nbsp; 16 / 16</div>
+      </div>
+    </div>
+  </section>
+
+
+  <script>
+    /* ── PORTADA CANVAS — fondo fluido estilo go.orsan.ai ── */
+    (function() {
+      const canvas = document.getElementById('portada-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      function resize() {
+        canvas.width  = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize, { passive: true });
+
+      /* Orbes fluidos — compositing 'screen' para luz aditiva (efecto video) */
+      const orbs = [
+        /* azul principal — top center, gran radio */
+        { x:.50, y:-.05, r:.70, spd:.00010, phase:0.00,  color:[20,90,210],   alpha:.55 },
+        /* naranja cálido — bottom left */
+        { x:.14, y:1.00, r:.60, spd:.00008, phase:1.80,  color:[10,70,180],  alpha:.48 },
+        /* azul secundario — right */
+        { x:.88, y:.65, r:.45, spd:.00014, phase:3.40,  color:[10,80,200],   alpha:.30 },
+        /* naranja accent — center */
+        { x:.55, y:.60, r:.28, spd:.00007, phase:5.10,  color:[30,100,200],    alpha:.22 },
+        /* azul accent — left */
+        { x:.08, y:.25, r:.32, spd:.00012, phase:2.60,  color:[40,110,200],  alpha:.25 },
+        /* bloom blanco central muy sutil */
+        { x:.50, y:.40, r:.20, spd:.00006, phase:4.20,  color:[180,210,255], alpha:.10 },
+      ];
+
+      const AX = .18, AY = .15;
+
+      function draw(t) {
+        const W = canvas.width, H = canvas.height;
+        ctx.clearRect(0, 0, W, H);
+
+        /* Base oscura */
+        ctx.fillStyle = '#173E7A';
+        ctx.fillRect(0, 0, W, H);
+
+        /* Screen mode: los orbes suman luz en lugar de solaparse */
+        ctx.globalCompositeOperation = 'screen';
+        orbs.forEach(o => {
+          const angle = t * o.spd * Math.PI * 2 + o.phase;
+          const cx = (o.x + Math.cos(angle) * AX) * W;
+          const cy = (o.y + Math.sin(angle * 1.3) * AY) * H;
+          const r  = o.r * Math.max(W, H);
+
+          const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+          const [R, G, B] = o.color;
+          g.addColorStop(0,   `rgba(${R},${G},${B},${o.alpha})`);
+          g.addColorStop(.42, `rgba(${R},${G},${B},${(o.alpha * .28).toFixed(3)})`);
+          g.addColorStop(1,   `rgba(${R},${G},${B},0)`);
+
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.arc(cx, cy, r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        ctx.globalCompositeOperation = 'source-over';
+
+        requestAnimationFrame(draw);
+      }
+
+      requestAnimationFrame(draw);
+    })();
+
+    const progressBar = document.getElementById('scroll-progress');
+    function updateProgress() {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      progressBar.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
+    }
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    let progressAnimated = false;
+    const progressObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !progressAnimated) {
+          progressAnimated = true;
+          document.querySelectorAll('.progress-row__fill').forEach(fill => {
+            const target = fill.getAttribute('data-target-width');
+            if (target) requestAnimationFrame(() => { fill.style.width = target + '%'; });
+          });
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
+    const reporteriaSection = document.getElementById('resultados');
+    if (reporteriaSection) progressObserver.observe(reporteriaSection);
+
+    const dots = document.querySelectorAll('.nav-dot');
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        const target = document.querySelector(dot.dataset.target);
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    const sections = document.querySelectorAll('.section[id]');
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          dots.forEach(d => d.classList.remove('active'));
+          const active = document.querySelector(`.nav-dot[data-target="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { threshold: 0.3 });
+    sections.forEach(s => navObserver.observe(s));
+
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+
+    /* ============================================================
+       MODO PRESENTACIÓN
+    ============================================================ */
+    (() => {
+      const allSlides   = [...document.querySelectorAll('.section[id]')];
+      const totalSlides = allSlides.length;
+      const btnPresentar  = document.getElementById('btn-presentar');
+      const presControls  = document.getElementById('pres-controls');
+      const presSlideBar  = document.getElementById('pres-slide-bar');
+      const presCounter   = document.getElementById('pres-counter');
+      const presSlideName = document.getElementById('pres-slide-name');
+      const btnPrev       = document.getElementById('pres-prev');
+      const btnNext       = document.getElementById('pres-next');
+      const btnExit       = document.getElementById('pres-exit-btn');
+
+      let isPresMode   = false;
+      let currentSlide = 0;
+      let presScrollEl = null; /* elemento con scroll-snap */
+
+      // --- Mapeo de IDs a nombres legibles ---
+      const slideNames = {
+        portada:     'Portada',
+        quienes:     'Quiénes somos',
+        servicios:   'Nuestros servicios',
+        operaciones: 'Centro de operaciones',
+        magnitud:    'Magnitud',
+        como:        'Cómo lo hacemos',
+        tecnologia:  'Tecnología',
+        'bi-quien':  'BI · El quién',
+        'bi-cuando': 'BI · El cuándo',
+        calidad:     'Calidad',
+        voz:         'Voz del cliente',
+        fidelidad:   'Fidelidad',
+        industrias:  'Industrias',
+        ventajas:    'Ventajas',
+        resultados:  'Resultados',
+        cierre:      'Contacto',
+      };
+
+      function updateUI() {
+        presCounter.textContent   = `${currentSlide + 1} / ${totalSlides}`;
+        presSlideName.textContent = slideNames[allSlides[currentSlide].id] || allSlides[currentSlide].id;
+        const pct = totalSlides > 1 ? ((currentSlide) / (totalSlides - 1)) * 100 : 100;
+        presSlideBar.style.width  = pct + '%';
+        btnPrev.disabled = currentSlide === 0;
+        btnNext.disabled = currentSlide === totalSlides - 1;
+      }
+
+      function goToSlide(index) {
+        currentSlide = Math.max(0, Math.min(totalSlides - 1, index));
+        allSlides[currentSlide].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        updateUI();
+      }
+
+      function enterPresMode() {
+        isPresMode = true;
+        document.body.classList.add('presentation-mode');
+
+        /* Scroll-snap en html */
+        document.documentElement.style.scrollSnapType   = 'y mandatory';
+        document.documentElement.style.overflowY        = 'scroll';
+        document.documentElement.style.height           = '100vh';
+        document.body.style.height                      = 'auto';
+        presScrollEl = document.documentElement;
+
+        /* Pantalla completa */
+        const req = document.documentElement.requestFullscreen ||
+                    document.documentElement.webkitRequestFullscreen;
+        if (req) req.call(document.documentElement).catch(() => {});
+
+        /* Mostrar controles, ocultar botón */
+        btnPresentar.style.opacity = '0';
+        btnPresentar.style.pointerEvents = 'none';
+        presControls.classList.add('visible');
+        presSlideBar.classList.add('visible');
+
+        /* Ir a la diapositiva actual detectada por nav */
+        const active = document.querySelector('.nav-dot.active');
+        if (active) {
+          const id = active.dataset.target?.replace('#', '');
+          const idx = allSlides.findIndex(s => s.id === id);
+          currentSlide = idx >= 0 ? idx : 0;
+        } else {
+          currentSlide = 0;
+        }
+        goToSlide(currentSlide);
+      }
+
+      function exitPresMode() {
+        if (!isPresMode) return;
+        isPresMode = false;
+        document.body.classList.remove('presentation-mode');
+
+        document.documentElement.style.scrollSnapType = '';
+        document.documentElement.style.overflowY      = '';
+        document.documentElement.style.height         = '';
+        document.body.style.height                    = '';
+
+        if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+
+        btnPresentar.style.opacity = '';
+        btnPresentar.style.pointerEvents = '';
+        presControls.classList.remove('visible');
+        presSlideBar.classList.remove('visible');
+
+        /* Restaurar posición de scroll */
+        allSlides[currentSlide].scrollIntoView({ behavior: 'instant', block: 'start' });
+      }
+
+      /* Track sección visible para actualizar contador mientras se navega */
+      const presObserver = new IntersectionObserver((entries) => {
+        if (!isPresMode) return;
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const idx = allSlides.indexOf(entry.target);
+            if (idx !== -1) { currentSlide = idx; updateUI(); }
+          }
+        });
+      }, { threshold: 0.5 });
+      allSlides.forEach(s => presObserver.observe(s));
+
+      /* Eventos */
+      btnPresentar.addEventListener('click', enterPresMode);
+      btnExit.addEventListener('click', exitPresMode);
+      btnPrev.addEventListener('click', () => goToSlide(currentSlide - 1));
+      btnNext.addEventListener('click', () => goToSlide(currentSlide + 1));
+
+      document.addEventListener('keydown', (e) => {
+        if (!isPresMode) return;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+          e.preventDefault(); goToSlide(currentSlide + 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          e.preventDefault(); goToSlide(currentSlide - 1);
+        }
+        /* ESC lo maneja el browser para salir de fullscreen */
+      });
+
+      document.addEventListener('fullscreenchange', () => {
+        if (!document.fullscreenElement && isPresMode) exitPresMode();
+      });
+    })();
+
+  </script>
+
+</body>
+</html>
