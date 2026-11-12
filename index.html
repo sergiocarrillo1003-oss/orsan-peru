@@ -3842,40 +3842,120 @@
   </script>
 
   <script>
-    function exportarPDF() {
-      // Seleccionar todos los elementos animados y hacerlos visibles
-      const animated = document.querySelectorAll(
-        '.reveal, [class*="reveal-delay"], [class*="portada-load"], [class*="portada-text"]'
-      );
-      const prevStyles = [];
-      animated.forEach(el => {
-        prevStyles.push({ el, opacity: el.style.opacity, transform: el.style.transform, transition: el.style.transition });
-        el.style.opacity    = '1';
-        el.style.transform  = 'none';
-        el.style.transition = 'none';
-      });
+    async function exportarPDF() {
+      const btn = document.getElementById('btn-pdf');
+      const originalHTML = btn.innerHTML;
 
-      // Desbloquear el scroll del body para que el navegador vea todas las secciones
-      const prevBodyOverflow = document.body.style.overflow;
-      const prevHtmlOverflow = document.documentElement.style.overflow;
-      document.body.style.overflow = 'visible';
-      document.documentElement.style.overflow = 'visible';
+      const setStatus = (txt) => {
+        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+          style="width:15px;height:15px;flex-shrink:0;animation:spin 1s linear infinite">
+          <circle cx="12" cy="12" r="9" stroke="rgba(255,255,255,.35)" stroke-width="2.5"/>
+          <path d="M12 3a9 9 0 0 1 9 9" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+        </svg><span>${txt}</span>`;
+        btn.disabled = true;
+      };
 
-      setTimeout(() => {
-        window.print();
-        // Restaurar después de imprimir
-        setTimeout(() => {
-          document.body.style.overflow = prevBodyOverflow;
-          document.documentElement.style.overflow = prevHtmlOverflow;
-          prevStyles.forEach(({ el, opacity, transform, transition }) => {
-            el.style.opacity    = opacity;
-            el.style.transform  = transform;
-            el.style.transition = transition;
+      const restoreBtn = () => {
+        btn.innerHTML = originalHTML;
+        btn.disabled = false;
+      };
+
+      try {
+        setStatus('Cargando…');
+
+        // ── Cargar html2canvas ──
+        if (!window.html2canvas) {
+          await new Promise((ok, fail) => {
+            const s = document.createElement('script');
+            s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+            s.onload = ok; s.onerror = fail;
+            document.head.appendChild(s);
           });
-        }, 1000);
-      }, 400);
+        }
+        // ── Cargar jsPDF ──
+        if (!window.jspdf) {
+          await new Promise((ok, fail) => {
+            const s = document.createElement('script');
+            s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+            s.onload = ok; s.onerror = fail;
+            document.head.appendChild(s);
+          });
+        }
+
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+        const PW = 297, PH = 210; // A4 landscape mm
+
+        const sections = Array.from(document.querySelectorAll('.section'));
+
+        // ── Revelar todos los elementos animados ──
+        const animated = document.querySelectorAll(
+          '.reveal, [class*="reveal-delay"], [class*="portada-load"], [class*="portada-text"]'
+        );
+        const animSaved = [];
+        animated.forEach(el => {
+          animSaved.push({
+            el,
+            opacity: el.style.opacity, transform: el.style.transform,
+            transition: el.style.transition, animation: el.style.animation
+          });
+          el.style.opacity    = '1';
+          el.style.transform  = 'none';
+          el.style.transition = 'none';
+          el.style.animation  = 'none';
+        });
+
+        // ── Capturar cada sección ──
+        for (let i = 0; i < sections.length; i++) {
+          const sec = sections[i];
+          setStatus(`Página ${i + 1} de ${sections.length}…`);
+
+          // Desplazarse a la sección para que el navegador la renderice
+          sec.scrollIntoView({ block: 'start', behavior: 'instant' });
+          await new Promise(r => setTimeout(r, 120));
+
+          const canvas = await html2canvas(sec, {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            logging: false,
+            backgroundColor: null,
+            width:  sec.offsetWidth,
+            height: sec.offsetHeight,
+            scrollX: -window.scrollX,
+            scrollY: -window.scrollY,
+          });
+
+          const img = canvas.toDataURL('image/jpeg', 0.93);
+          if (i > 0) pdf.addPage();
+          pdf.addImage(img, 'JPEG', 0, 0, PW, PH);
+        }
+
+        // ── Restaurar animaciones ──
+        animSaved.forEach(({ el, opacity, transform, transition, animation }) => {
+          el.style.opacity    = opacity;
+          el.style.transform  = transform;
+          el.style.transition = transition;
+          el.style.animation  = animation;
+        });
+
+        // Volver al inicio
+        window.scrollTo({ top: 0, behavior: 'instant' });
+
+        pdf.save('ORSAN-Presentacion-2026.pdf');
+
+      } catch (err) {
+        console.error('Error PDF:', err);
+        alert('No se pudo generar el PDF.\n' + err.message);
+      } finally {
+        restoreBtn();
+      }
     }
   </script>
+
+  <style>
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
 
 </body>
 </html>
